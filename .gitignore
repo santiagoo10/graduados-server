@@ -8,3 +8,9 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+
+###> Oter's ###
+/.idea/*
+
+###> Oter's ###
