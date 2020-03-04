@@ -1,4 +1,6 @@
 {
+    "name": "renerecalde/oferta",
+    "description": "Sistema de Oferta",
     "type": "project",
     "license": "proprietary",
     "require": {
