@@ -33,6 +33,12 @@ class AcademicUnit
      */
     private $email;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="contacto_id", referencedColumnName="id")
+     */
+    private $contacto;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +76,18 @@ class AcademicUnit
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getContacto(): ?Person
+    {
+        return $this->contacto;
+    }
+
+    public function setContacto(?Person $contacto): self
+    {
+        $this->contacto = $contacto;
 
         return $this;
     }
