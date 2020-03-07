@@ -49,6 +49,12 @@ class AcademicUnit
      */
     private $contacto;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Address")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     */
+    private $address;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,6 +104,18 @@ class AcademicUnit
     public function setContacto(?Person $contacto): self
     {
         $this->contacto = $contacto;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     },
  *     itemOperations={
  *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},º
+ *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProfessionRepository")

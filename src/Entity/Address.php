@@ -63,6 +63,13 @@ class Address
      */
     private $lon;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     */
+    private $location;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -148,6 +155,18 @@ class Address
     public function setLon(float $lon): self
     {
         $this->lon = $lon;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
 
         return $this;
     }
