@@ -63,12 +63,17 @@ class Address
      */
     private $lon;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $phoneNumber;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Location")
-     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Zone")
+     * @ORM\JoinColumn(name="zone_id", referencedColumnName="id")
      */
-    private $location;
+    private $zone;
+
 
     public function getId(): ?int
     {
@@ -159,15 +164,29 @@ class Address
         return $this;
     }
 
-    public function getLocation(): ?Location
+    public function getPhoneNumber(): ?string
     {
-        return $this->location;
+        return $this->phoneNumber;
     }
 
-    public function setLocation(?Location $location): self
+    public function setPhoneNumber(string $phoneNumber): self
     {
-        $this->location = $location;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
+
+        return $this;
+    }
+
+
 }

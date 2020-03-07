@@ -44,10 +44,6 @@ class Person
      */
     private $dni;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -78,6 +74,12 @@ class Person
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     *@ORM\ManyToOne(targetEntity="Address")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     */
+    private $address;
 
     public function getId(): ?int
     {
@@ -120,17 +122,6 @@ class Person
         return $this;
     }
 
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
 
     public function getCellPhone(): ?string
     {
@@ -200,6 +191,18 @@ class Person
     public function setUpdatedAt(DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
