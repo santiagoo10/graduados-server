@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -31,43 +32,54 @@ class Sale
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $conditinon;
+    private $condition;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank()
+     * @Assert\Range(min=0, minMessage="The price must be superior to 0.")
      */
     private $price;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
+     * @Assert\Range(min=0, minMessage="The discount must be superior to 0.")
      */
     private $discount;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $datePublication;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateExpiration;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $revised;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SaleType")
+     * @ORM\JoinColumn(name="sale_type_id", referencedColumnName="id")
+     */
+    private $saleType;
 
     public function getId(): ?int
     {
@@ -98,17 +110,6 @@ class Sale
         return $this;
     }
 
-    public function getConditinon(): ?string
-    {
-        return $this->conditinon;
-    }
-
-    public function setConditinon(string $conditinon): self
-    {
-        $this->conditinon = $conditinon;
-
-        return $this;
-    }
 
     public function getPrice(): ?float
     {
