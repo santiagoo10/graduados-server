@@ -62,6 +62,9 @@ class Person
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
 
@@ -73,19 +76,25 @@ class Person
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      * @Assert\NotBlank()
      */
     private $dateUp;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      * @Assert\NotBlank()
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank()
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\Date
      */
     private $updatedAt;
 

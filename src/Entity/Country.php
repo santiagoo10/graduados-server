@@ -41,11 +41,28 @@ class Country
      */
     private $code;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\NotBlank()
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\Date
+     */
+    private $updatedAt;
 
     public function getId(): ?int
     {
@@ -72,6 +89,30 @@ class Country
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

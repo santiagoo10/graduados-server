@@ -82,6 +82,22 @@ class Sale
     private $revised;
 
     /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\NotBlank()
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\NotBlank()
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SaleType")
      * @ORM\JoinColumn(name="sale_type_id", referencedColumnName="id")
      */
@@ -173,6 +189,54 @@ class Sale
     public function setRevised(bool $revised): self
     {
         $this->revised = $revised;
+
+        return $this;
+    }
+
+    public function getCondition(): ?string
+    {
+        return $this->condition;
+    }
+
+    public function setCondition(?string $condition): self
+    {
+        $this->condition = $condition;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getSaleType(): ?SaleType
+    {
+        return $this->saleType;
+    }
+
+    public function setSaleType(?SaleType $saleType): self
+    {
+        $this->saleType = $saleType;
 
         return $this;
     }

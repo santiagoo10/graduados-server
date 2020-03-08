@@ -55,10 +55,26 @@ class AcademicUnit
     private $email;
 
     /**
+     * @ORM\Column(type="datetime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\NotBlank()
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="contacto_id", referencedColumnName="id")
      */
-    private $contacto;
+    private $contact;
 
     /**
      * @ORM\ManyToOne(targetEntity="Address")
@@ -107,17 +123,6 @@ class AcademicUnit
         return $this;
     }
 
-    public function getContacto(): ?Person
-    {
-        return $this->contacto;
-    }
-
-    public function setContacto(?Person $contacto): self
-    {
-        $this->contacto = $contacto;
-
-        return $this;
-    }
 
     public function getAddress(): ?Address
     {
@@ -127,6 +132,42 @@ class AcademicUnit
     public function setAddress(?Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getContact(): ?Person
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Person $contact): self
+    {
+        $this->contact = $contact;
 
         return $this;
     }

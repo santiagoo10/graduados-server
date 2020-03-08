@@ -41,6 +41,22 @@ class Profession
     private $type;
 
     /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\NotBlank()
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\NotBlank()
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AcademicUnit")
      * @ORM\JoinColumn(name="academic_unit_id", referencedColumnName="id")
      */
@@ -84,6 +100,30 @@ class Profession
     public function setAcademicUnit(?AcademicUnit $academicUnit): self
     {
         $this->academicUnit = $academicUnit;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
