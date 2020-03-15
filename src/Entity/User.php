@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @ApiResource(
@@ -83,6 +83,7 @@ class User implements UserInterface
 //        $this->id = Uuid::uuid4()->toString();
         $this->setEmail($email);
         $this->setUsername($username);
+        $this->roles[] = Role::ROLE_USER;
     }
 
     public function getId(): ?int
@@ -165,7 +166,7 @@ class User implements UserInterface
 
     public function setUsername(string $username): self
     {
-        $this->username = $username;
+        $this->email = $username;
 
         return $this;
     }
