@@ -3,28 +3,25 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
- *     collectionOperations={
- *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},
- *     },
- *      graphql={
- *         "item_query"={"security"="is_granted('ROLE_USER') and object.owner == user"},
- *         "collection_query"={"security"="is_granted('ROLE_ADMIN')"},
- *         "delete"={"security"="is_granted('ROLE_ADMIN')"},
- *         "create"={"security"="is_granted('ROLE_ADMIN')"}
- *     }
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
+ *
  */
 class User implements UserInterface
 {
@@ -36,20 +33,57 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=191, unique=true)
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
+
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"user:write"})
      */
     private $roles = [];
 
     /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read", "user:write"})
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read", "user:write"})
+     */
+    private $updatedAt;
+
+    /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups({"user:write"})
+
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=191, unique=true)
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
+     */
+    private $username;
+
+    public function __construct( $email, $username)
+    {
+
+//        $this->id = Uuid::uuid4()->toString();
+        $this->setEmail($email);
+        $this->setUsername($username);
+    }
 
     public function getId(): ?int
     {
@@ -75,7 +109,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -127,5 +161,48 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt(): self
+    {
+        $this->createdAt = new DateTime();
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new DateTime();
+
+        return $this;
     }
 }

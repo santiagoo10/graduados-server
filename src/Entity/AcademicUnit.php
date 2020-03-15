@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -25,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\AcademicUnitRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class AcademicUnit
 {
@@ -56,7 +60,6 @@ class AcademicUnit
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank()
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
@@ -66,7 +69,6 @@ class AcademicUnit
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\NotBlank()
      */
     private $updatedAt;
 
@@ -136,26 +138,37 @@ class AcademicUnit
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt(): self
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTime();
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new DateTime();
 
         return $this;
     }

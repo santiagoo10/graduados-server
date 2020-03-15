@@ -3,28 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
- *     collectionOperations={
- *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},
- *     },
- *      graphql={
- *         "item_query"={"security"="is_granted('ROLE_USER') and object.owner == user"},
- *         "collection_query"={"security"="is_granted('ROLE_ADMIN')"},
- *         "delete"={"security"="is_granted('ROLE_ADMIN')"},
- *         "create"={"security"="is_granted('ROLE_ADMIN')"}
- *     }
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\CountryRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Country
 {
@@ -52,7 +40,6 @@ class Country
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -60,7 +47,6 @@ class Country
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\Date
      */
     private $updatedAt;
 
@@ -93,26 +79,41 @@ class Country
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt(): self
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTime();
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     */
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new DateTime();
 
         return $this;
     }

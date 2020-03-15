@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -25,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ZoneRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Zone
 {
@@ -56,7 +59,6 @@ class Zone
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -64,7 +66,6 @@ class Zone
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\NotBlank()
      */
     private $updatedAt;
 
@@ -132,9 +133,14 @@ class Zone
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt(): self
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTime();
 
         return $this;
     }
@@ -144,9 +150,15 @@ class Zone
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PreUpdate()
+     * @ORM\PrePersist()
+     */
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new DateTime();
 
         return $this;
     }
