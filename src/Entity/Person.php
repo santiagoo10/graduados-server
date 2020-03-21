@@ -40,29 +40,46 @@ class Person
     private $id;
 
     /**
+     * First name.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $name;
 
     /**
+     * Last names.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $LastName;
 
     /**
+     * Document unique identification(Argentina).
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $dni;
 
+    /**
+     * Cuit Argentina
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cuit;
+
 
     /**
+     * Cell phone.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $cellPhone;
 
     /**
+     * Email. If person is user then same user::email
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Email(
@@ -72,20 +89,8 @@ class Person
     private $email;
 
     /**
-     * @ORM\Column(type="boolean")
-     * @Assert\NotBlank()
-     */
-    private $isActive;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Assert\DateTime
-     * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\NotBlank()
-     */
-    private $dateUp;
-
-    /**
+     * Date when person has been created in the sistem.
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
@@ -93,6 +98,8 @@ class Person
     private $createdAt;
 
     /**
+     * Date when person has been updated in the sistem.
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
@@ -100,6 +107,8 @@ class Person
     private $updatedAt;
 
     /**
+     * Addres of the person.
+     *
      *@ORM\ManyToOne(targetEntity="Address")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */
@@ -171,29 +180,7 @@ class Person
         return $this;
     }
 
-    public function getIsActive(): ?bool
-    {
-        return $this->isActive;
-    }
 
-    public function setIsActive(bool $isActive): self
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    public function getDateUp(): ?DateTimeInterface
-    {
-        return $this->dateUp;
-    }
-
-    public function setDateUp(DateTimeInterface $dateUp): self
-    {
-        $this->dateUp = $dateUp;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?DateTimeInterface
     {
@@ -238,6 +225,18 @@ class Person
     public function setAddress(?Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getCuit(): ?string
+    {
+        return $this->cuit;
+    }
+
+    public function setCuit(?string $cuit): self
+    {
+        $this->cuit = $cuit;
 
         return $this;
     }

@@ -40,12 +40,15 @@ class AcademicUnit
     private $id;
 
     /**
+     * Name of the academic unit or institute.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $name;
 
     /**
+     * Phone of the atention to informatic personal.
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
@@ -53,12 +56,17 @@ class AcademicUnit
     private $phone;
 
     /**
+     * Emmail for technical support.
+     *
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $email;
 
     /**
+     * Date when the Unit academic has been created in the sistem.
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
@@ -66,6 +74,8 @@ class AcademicUnit
     private $createdAt;
 
     /**
+     * Date when Unit academic has been updated in the sistem.
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
@@ -73,12 +83,16 @@ class AcademicUnit
     private $updatedAt;
 
     /**
+     * Contact person for technical supports.
+     *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="contacto_id", referencedColumnName="id")
      */
     private $contact;
 
     /**
+     * Addres of the Unit academic.
+     *
      * @ORM\ManyToOne(targetEntity="Address")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */

@@ -7,18 +7,17 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use phpDocumentor\Reflection\Types\Boolean;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Security\Role;
 
 /**
- * @ApiResource(
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}},
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
  *
@@ -33,6 +32,8 @@ class User implements UserInterface
     private $id;
 
     /**
+     * Email from user.
+     *
      * @ORM\Column(type="string", length=191, unique=true)
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
@@ -41,12 +42,16 @@ class User implements UserInterface
     private $email;
 
     /**
+     * User's roles.
+     *
      * @ORM\Column(type="json")
      * @Groups({"user:write"})
      */
     private $roles = [];
 
     /**
+     * Date when the user has created.
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
@@ -55,6 +60,8 @@ class User implements UserInterface
     private $createdAt;
 
     /**
+     * Date when the user has been updated.
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
@@ -63,6 +70,8 @@ class User implements UserInterface
     private $updatedAt;
 
     /**
+     * User password.
+     *
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups({"user:write"})
@@ -71,18 +80,24 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=191, unique=true)
-     * @Groups({"user:read", "user:write"})
-     * @Assert\NotBlank()
+     * User name.
+     *
+     * @ORM\Column(type="string", length=191)
      */
     private $username;
 
-    public function __construct( $email, $username)
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive = true;
+
+
+    public function __construct( $email)
     {
 
 //        $this->id = Uuid::uuid4()->toString();
         $this->setEmail($email);
-        $this->setUsername($username);
         $this->roles[] = Role::ROLE_USER;
     }
 
@@ -164,13 +179,6 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function setUsername(string $username): self
-    {
-        $this->email = $username;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
@@ -206,4 +214,30 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     * @return $this
+     */
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+
+
 }
