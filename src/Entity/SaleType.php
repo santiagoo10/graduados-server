@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
- * @ORM\entity(repositoryClass="App\Repository\SaleTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SaleTypeRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class SaleType
