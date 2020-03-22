@@ -8,6 +8,8 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ApiResource(
@@ -29,6 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  */
 class Sale
 {
@@ -86,14 +89,12 @@ class Sale
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $updatedAt;

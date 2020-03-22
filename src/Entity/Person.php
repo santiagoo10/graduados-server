@@ -5,30 +5,19 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
- *     collectionOperations={
- *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},
- *     },
- *      graphql={
- *         "item_query"={"security"="is_granted('ROLE_USER') and object.owner == user"},
- *         "collection_query"={"security"="is_granted('ROLE_ADMIN')"},
- *         "delete"={"security"="is_granted('ROLE_ADMIN')"},
- *         "create"={"security"="is_granted('ROLE_ADMIN')"}
- *     }
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  */
 class Person
 {
@@ -92,7 +81,6 @@ class Person
      * Date when person has been created in the sistem.
      *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $createdAt;
@@ -101,7 +89,6 @@ class Person
      * Date when person has been updated in the sistem.
      *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $updatedAt;
@@ -109,10 +96,26 @@ class Person
     /**
      * Addres of the person.
      *
-     *@ORM\ManyToOne(targetEntity="Address")
+     * @ORM\ManyToOne(targetEntity="Address")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */
     private $address;
+
+    /**
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Store", mappedBy="contact", cascade={"persist", "remove"})
+     */
+    private $storeContacts;
+
+    public function __construct()
+    {
+        $this->storeContacts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -237,6 +240,49 @@ class Person
     public function setCuit(?string $cuit): self
     {
         $this->cuit = $cuit;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Store[]
+     */
+    public function getStoreContacts(): Collection
+    {
+        return $this->storeContacts;
+    }
+
+    public function addStoreContact(Store $storeContact): self
+    {
+        if (!$this->storeContacts->contains($storeContact)) {
+            $this->storeContacts[] = $storeContact;
+            $storeContact->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStoreContact(Store $storeContact): self
+    {
+        if ($this->storeContacts->contains($storeContact)) {
+            $this->storeContacts->removeElement($storeContact);
+            // set the owning side to null (unless already changed)
+            if ($storeContact->getContact() === $this) {
+                $storeContact->setContact(null);
+            }
+        }
 
         return $this;
     }

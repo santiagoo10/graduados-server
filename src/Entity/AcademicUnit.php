@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ApiResource(
@@ -29,6 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\AcademicUnitRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  */
 class AcademicUnit
 {
@@ -61,6 +64,9 @@ class AcademicUnit
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
 

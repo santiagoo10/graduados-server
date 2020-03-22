@@ -3,31 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
- *     collectionOperations={
- *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},
- *     },
- *      graphql={
- *         "item_query"={"security"="is_granted('ROLE_USER') and object.owner == user"},
- *         "collection_query"={"security"="is_granted('ROLE_ADMIN')"},
- *         "delete"={"security"="is_granted('ROLE_ADMIN')"},
- *         "create"={"security"="is_granted('ROLE_ADMIN')"}
- *     }
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ProvinceRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  */
 class Province
 {
@@ -39,42 +28,59 @@ class Province
     private $id;
 
     /**
+     * Province code.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      */
     private $code;
 
     /**
+     * Name.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $name;
 
     /**
+     * Abbreviation.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $abbreviation;
 
     /**
+     * Date when the Province has been created.
+     *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
-     * @var string A "Y-m-d H:i:s" formatted value
+     * @var DateTime A "Y-m-d H:i:s" formatted value
      */
     private $createdAt;
 
     /**
+     * Date when the Province has been updated.
+     *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
-     * @var string A "Y-m-d H:i:s" formatted value
+     * @var DateTime A "Y-m-d H:i:s" formatted value
      */
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Country")
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Country", inversedBy="provinces")
      *
      */
     private $country;
+
+    /**
+     * @ORM\OneToMany(targetEntity="City", mappedBy="province", cascade={"persist", "remove"})
+     */
+    private $cities;
+
+    public function __construct()
+    {
+        $this->cities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,17 +123,7 @@ class Province
         return $this;
     }
 
-    public function getCountry(): ?Country
-    {
-        return $this->country;
-    }
 
-    public function setCountry(?Country $country): self
-    {
-        $this->country = $country;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -160,6 +156,49 @@ class Province
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|City[]
+     */
+    public function getCities(): Collection
+    {
+        return $this->cities;
+    }
+
+    public function addCity(City $city): self
+    {
+        if (!$this->cities->contains($city)) {
+            $this->cities[] = $city;
+            $city->setProvince($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCity(City $city): self
+    {
+        if ($this->cities->contains($city)) {
+            $this->cities->removeElement($city);
+            // set the owning side to null (unless already changed)
+            if ($city->getProvince() === $this) {
+                $city->setProvince(null);
+            }
+        }
 
         return $this;
     }

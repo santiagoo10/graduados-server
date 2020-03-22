@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,10 +20,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Security\Role;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
  *
+ * @ApiFilter(BooleanFilter::class, properties={"isActive"})
+ * @ApiFilter(SearchFilter::class, properties={"email":"partial"})
  */
 class User implements UserInterface
 {
@@ -37,7 +45,9 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=191, unique=true)
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
-
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
 
@@ -53,7 +63,6 @@ class User implements UserInterface
      * Date when the user has created.
      *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"user:read", "user:write"})
      */
@@ -63,7 +72,6 @@ class User implements UserInterface
      * Date when the user has been updated.
      *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"user:read", "user:write"})
      */

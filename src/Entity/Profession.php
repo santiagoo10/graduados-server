@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ApiResource(
@@ -23,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProfessionRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  */
 class Profession
 {
@@ -46,14 +49,12 @@ class Profession
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $updatedAt;

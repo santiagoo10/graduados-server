@@ -3,29 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
- *     collectionOperations={
- *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN') or object.owner == user"},
- *     },
- *      graphql={
- *         "item_query"={"security"="is_granted('ROLE_USER') and object.owner == user"},
- *         "collection_query"={"security"="is_granted('ROLE_ADMIN')"},
- *         "delete"={"security"="is_granted('ROLE_ADMIN')"},
- *         "create"={"security"="is_granted('ROLE_ADMIN')"}
- *     }
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ZoneRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -39,11 +24,15 @@ class Zone
     private $id;
 
     /**
+     * Code.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $code;
 
     /**
+     * Name.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      *
@@ -51,27 +40,28 @@ class Zone
     private $name;
 
     /**
+     * Type
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
+     * Date when the zone has been updated.
+     *
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="City")
-     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="zones")
      */
     private $city;
 
@@ -116,17 +106,6 @@ class Zone
         return $this;
     }
 
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -159,6 +138,18 @@ class Zone
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }
