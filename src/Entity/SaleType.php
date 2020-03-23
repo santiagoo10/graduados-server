@@ -9,7 +9,9 @@ use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  attributes={"pagination_per_page"=10}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\SaleTypeRepository")
  * @ORM\HasLifecycleCallbacks()
  */

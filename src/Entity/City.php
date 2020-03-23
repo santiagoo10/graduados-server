@@ -15,7 +15,9 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     attributes={"pagination_per_page"=10}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  * @ORM\HasLifecycleCallbacks()
  *

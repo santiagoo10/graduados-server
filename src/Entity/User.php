@@ -22,7 +22,8 @@ use App\Security\Role;
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"}
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
