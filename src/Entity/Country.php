@@ -12,10 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     attributes={"pagination_per_page"=10}
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\CountryRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -35,6 +40,7 @@ class Country
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
+     * @Groups({"user:read", "user:write"})
      */
     private $code;
 
@@ -44,6 +50,8 @@ class Country
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $name;
 
@@ -52,6 +60,7 @@ class Country
      *
      * @ORM\Column(type="datetime")
      * @var DateTime A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
@@ -60,20 +69,10 @@ class Country
      *
      * @ORM\Column(type="datetime")
      * @var DateTime A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
-    /**
-     * Bidirectional - One-To-Many (INVERSE SIDE)
-     *
-     * @ORM\OneToMany(targetEntity="Province", mappedBy="country" , cascade={"persist", "remove"})
-     */
-    private $provinces;
-
-    public function __construct()
-    {
-        $this->provinces = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -143,34 +142,4 @@ class Country
         return $this;
     }
 
-    /**
-     * @return Collection|Province[]
-     */
-    public function getProvinces(): Collection
-    {
-        return $this->provinces;
-    }
-
-    public function addProvince(Province $province): self
-    {
-        if (!$this->provinces->contains($province)) {
-            $this->provinces[] = $province;
-            $province->setCountry($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProvince(Province $province): self
-    {
-        if ($this->provinces->contains($province)) {
-            $this->provinces->removeElement($province);
-            // set the owning side to null (unless already changed)
-            if ($province->getCountry() === $this) {
-                $province->setCountry(null);
-            }
-        }
-
-        return $this;
-    }
 }

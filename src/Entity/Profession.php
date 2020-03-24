@@ -10,10 +10,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProfessionRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -31,29 +36,36 @@ class Profession
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcademicUnit")
      * @ORM\JoinColumn(name="academic_unit_id", referencedColumnName="id")
+     * @Groups({"user:read", "user:write"})
      */
     private $academicUnit;
 

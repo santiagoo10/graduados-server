@@ -8,10 +8,15 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     attributes={ "pagination_per_page"= 10}
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ZoneRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -29,6 +34,8 @@ class Zone
      * Code.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $code;
 
@@ -37,6 +44,8 @@ class Zone
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      *
      */
     private $name;
@@ -45,6 +54,8 @@ class Zone
      * Type
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $type;
 
@@ -53,17 +64,20 @@ class Zone
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="City", inversedBy="zones")
+     * @ORM\ManyToOne(targetEntity="City")
+     * @Groups({"user:read", "user:write"})
      */
     private $city;
 
@@ -155,4 +169,6 @@ class Zone
 
         return $this;
     }
+
+
 }

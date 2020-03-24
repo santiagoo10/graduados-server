@@ -12,10 +12,15 @@ use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     attributes={"pagination_per_page"=10}
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -35,6 +40,8 @@ class Person
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $name;
 
@@ -43,6 +50,8 @@ class Person
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $LastName;
 
@@ -50,6 +59,8 @@ class Person
      * Document unique identification(Argentina).
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $dni;
 
@@ -57,14 +68,16 @@ class Person
      * Cuit Argentina
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $cuit;
-
 
     /**
      * Cell phone.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $cellPhone;
 
@@ -76,6 +89,7 @@ class Person
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
+     * @Groups({"user:read", "user:write"})
      */
     private $email;
 
@@ -84,6 +98,7 @@ class Person
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
@@ -92,6 +107,7 @@ class Person
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
@@ -99,25 +115,19 @@ class Person
      * Addres of the person.
      *
      * @ORM\ManyToOne(targetEntity="Address")
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     * @Groups({"user:read", "user:write"})
      */
     private $address;
 
     /**
+     * User of the person
+     *
      * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @Groups({"user:read", "user:write"})
      */
     private $user;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Store", mappedBy="contact", cascade={"persist", "remove"})
-     */
-    private $storeContacts;
 
-    public function __construct()
-    {
-        $this->storeContacts = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -258,34 +268,5 @@ class Person
         return $this;
     }
 
-    /**
-     * @return Collection|Store[]
-     */
-    public function getStoreContacts(): Collection
-    {
-        return $this->storeContacts;
-    }
 
-    public function addStoreContact(Store $storeContact): self
-    {
-        if (!$this->storeContacts->contains($storeContact)) {
-            $this->storeContacts[] = $storeContact;
-            $storeContact->setContact($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStoreContact(Store $storeContact): self
-    {
-        if ($this->storeContacts->contains($storeContact)) {
-            $this->storeContacts->removeElement($storeContact);
-            // set the owning side to null (unless already changed)
-            if ($storeContact->getContact() === $this) {
-                $storeContact->setContact(null);
-            }
-        }
-
-        return $this;
-    }
 }

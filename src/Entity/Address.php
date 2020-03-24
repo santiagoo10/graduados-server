@@ -8,9 +8,16 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -26,61 +33,70 @@ class Address
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $routeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $routeNumber;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $km;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $phoneNumber;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
-     * @ORM\JoinColumn(name="zone_id", referencedColumnName="id")
+     * @Groups({"user:read", "user:write"})
      */
     private $zone;
 

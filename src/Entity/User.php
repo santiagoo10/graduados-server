@@ -18,12 +18,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Security\Role;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put"},
- *     attributes={ "pagination_per_page"= 10}
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -65,7 +68,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
@@ -74,7 +77,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
@@ -84,20 +87,22 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups({"user:write"})
-
      */
     private $password;
 
     /**
      * User name.
      *
-     * @ORM\Column(type="string", length=191)
+     * @ORM\Column(type="string", length=191, unique=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $username;
 
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"user:read", "user:write"})
      */
     private $isActive = true;
 

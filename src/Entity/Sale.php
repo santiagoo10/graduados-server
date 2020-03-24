@@ -11,12 +11,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
  * @ApiResource(
- *
- *  attributes={"pagination_per_page"=10}
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -35,65 +39,86 @@ class Sale
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      */
     private $condition;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Assert\Range(min=0, minMessage="The price must be superior to 0.")
+     * @Assert\PositiveOrZero
+     * @Groups({"user:read", "user:write"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Assert\Range(min=0, minMessage="The discount must be superior to 0.")
+     * @Assert\PositiveOrZero
+     * @Groups({"user:read", "user:write"})
      */
     private $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read", "user:write"})
      */
     private $datePublication;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read", "user:write"})
      */
     private $dateExpiration;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $revised;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="SaleType")
-     * @ORM\JoinColumn(name="sale_type_id", referencedColumnName="id")
+     * @Groups({"user:read", "user:write"})
      */
     private $saleType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Store")
+     * @Groups({"user:read", "user:write"})
+     */
+    private $store;
 
     public function getId(): ?int
     {
@@ -240,6 +265,18 @@ class Sale
     public function setSaleType(?SaleType $saleType): self
     {
         $this->saleType = $saleType;
+
+        return $this;
+    }
+
+    public function getStore(): ?Store
+    {
+        return $this->store;
+    }
+
+    public function setStore(?Store $store): self
+    {
+        $this->store = $store;
 
         return $this;
     }

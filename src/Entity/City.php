@@ -11,12 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 
 /**
  * @ApiResource(
- *     attributes={"pagination_per_page"=10}
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ *     attributes={ "pagination_per_page"= 10},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -37,6 +42,8 @@ class City
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"user:read", "user:write"})
      *
      */
     private $name;
@@ -46,6 +53,7 @@ class City
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $createdAt;
 
@@ -54,23 +62,17 @@ class City
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"user:read"})
      */
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Province", inversedBy="cities")
+     * @ORM\ManyToOne(targetEntity="Province")
+     * @Groups({"user:read", "user:write"})
      */
     private $province;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Zone", mappedBy="city", cascade={"persist", "remove"})
-     */
-    private $zones;
 
-    public function __construct()
-    {
-        $this->zones = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -137,34 +139,4 @@ class City
         return $this;
     }
 
-    /**
-     * @return Collection|Zone[]
-     */
-    public function getZones(): Collection
-    {
-        return $this->zones;
-    }
-
-    public function addZone(Zone $zone): self
-    {
-        if (!$this->zones->contains($zone)) {
-            $this->zones[] = $zone;
-            $zone->setCity($this);
-        }
-
-        return $this;
-    }
-
-    public function removeZone(Zone $zone): self
-    {
-        if ($this->zones->contains($zone)) {
-            $this->zones->removeElement($zone);
-            // set the owning side to null (unless already changed)
-            if ($zone->getCity() === $this) {
-                $zone->setCity(null);
-            }
-        }
-
-        return $this;
-    }
 }
