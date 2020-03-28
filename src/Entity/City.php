@@ -3,14 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
@@ -18,10 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"city:read"}},
+ *     denormalizationContext={"groups"={"city:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -43,7 +44,8 @@ class City
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"city:read", "city:write"})
+     * @ApiProperty(iri="http://schema.org/name")
      *
      */
     private $name;
@@ -53,7 +55,7 @@ class City
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"city:read"})
      */
     private $createdAt;
 
@@ -62,13 +64,13 @@ class City
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"city:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Province")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"city:read", "city:write"})
      */
     private $province;
 

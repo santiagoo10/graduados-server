@@ -3,20 +3,23 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use DateTime;
 use DateTimeInterface;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Exception;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put", "delete"},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"address:read"}},
+ *     denormalizationContext={"groups"={"address:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -34,71 +37,81 @@ class Address
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write"})
      */
     private $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write"})
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write"})
      */
     private $routeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write"})
      */
     private $routeNumber;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write"})
      */
     private $km;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write"})
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write" , "person:read", "person:write"})
      */
     private $phoneNumber;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"address:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"address:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write"})
      */
     private $zone;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Person", mappedBy="addresses")
+     */
+    private $people;
+
+    public function __construct()
+    {
+        $this->people = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -245,6 +258,34 @@ class Address
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Person[]
+     */
+    public function getPeople(): Collection
+    {
+        return $this->people;
+    }
+
+    public function addPerson(Person $person): self
+    {
+        if (!$this->people->contains($person)) {
+            $this->people[] = $person;
+            $person->addAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removePerson(Person $person): self
+    {
+        if ($this->people->contains($person)) {
+            $this->people->removeElement($person);
+            $person->removeAddress($this);
+        }
 
         return $this;
     }

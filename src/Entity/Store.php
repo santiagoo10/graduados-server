@@ -3,19 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"store:read"}},
+ *     denormalizationContext={"groups"={"strore:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
  * @ApiFilter(SearchFilter::class, properties={"razonSocial":"partial"})
@@ -34,14 +35,15 @@ class Store
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
+     * @ApiProperty(iri="http://schema.org/name")
      */
     private $razonSocial;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      *
      */
     private $cuit;
@@ -51,60 +53,60 @@ class Store
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "strore:write"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "strore:write"})
      */
     private $facebook;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $instagram;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $twitter;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $mercadolibre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $contact;
 
     /**
      * @ORM\ManyToOne(targetEntity="Address")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $address;
 

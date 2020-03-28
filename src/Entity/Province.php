@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,16 +12,18 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"= {"province:read"}}},
+ *     "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}*
+ *     normalizationContext={"groups"={"province:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"province:write"}, "swagger_definition_name"="Write"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProvinceRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -38,7 +42,7 @@ class Province
      * Province code.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"province:read", "province:write"})
      *
      */
     private $code;
@@ -49,7 +53,8 @@ class Province
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"province:read", "province:write"})
+     * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
 
@@ -58,7 +63,7 @@ class Province
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"province:read", "province:write"})
      */
     private $abbreviation;
 
@@ -67,7 +72,7 @@ class Province
      *
      * @ORM\Column(type="datetime")
      * @var DateTime A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"province:read"})
      */
     private $createdAt;
 
@@ -76,13 +81,14 @@ class Province
      *
      * @ORM\Column(type="datetime")
      * @var DateTime A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"province:read"})
      */
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Country")
-     * @Groups({"user:read", "user:write"})
+     * @ORM\ManyToOne(targetEntity="Country", cascade={"persist"})
+     * @Assert\Valid()
+     * @Groups({"province:read", "province:write" , "country:write", "country:read"})
      *
      */
     private $country;

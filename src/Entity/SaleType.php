@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use DateTime;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -34,6 +35,7 @@ class SaleType
      * @Assert\NotBlank()
      * @Assert\Type("string")
      * @Groups({"user:read", "user:write"})
+     * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
 
@@ -54,7 +56,6 @@ class SaleType
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
-     * @Assert\DateTime
      * @Groups({"user:read", "user:write"})
      */
     private $description;

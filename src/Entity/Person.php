@@ -3,24 +3,30 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use DateTimeInterface;
+use Exception;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={
+ *      "get"={
+ *          "normalization_context"={
+ *              "groups"={"person:read"}
+ *          }},
+ *      "put", "delete"},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"person:read"}},
+ *     denormalizationContext={"groups"={"person:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -41,7 +47,7 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
      */
     private $name;
 
@@ -51,16 +57,16 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
      */
-    private $LastName;
+    private $lastName;
 
     /**
      * Document unique identification(Argentina).
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
      */
     private $dni;
 
@@ -69,7 +75,7 @@ class Person
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
      */
     private $cuit;
 
@@ -77,7 +83,7 @@ class Person
      * Cell phone.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
      */
     private $cellPhone;
 
@@ -89,7 +95,8 @@ class Person
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
+     * @ApiProperty(iri="http://schema.org/name")
      */
     private $email;
 
@@ -98,7 +105,7 @@ class Person
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"person:read"})
      */
     private $createdAt;
 
@@ -107,25 +114,29 @@ class Person
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"person:read"})
      */
     private $updatedAt;
 
-    /**
-     * Addres of the person.
-     *
-     * @ORM\ManyToOne(targetEntity="Address")
-     * @Groups({"user:read", "user:write"})
-     */
-    private $address;
 
     /**
      * User of the person
      *
      * @ORM\OneToOne(targetEntity="User")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"person:read", "person:write"})
      */
     private $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Address", inversedBy="people", cascade={"persist"})
+     * @Groups({"person:read", "person:write", "address:read", "address:write"})
+     */
+    private $addresses;
+
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+    }
 
 
 
@@ -146,17 +157,6 @@ class Person
         return $this;
     }
 
-    public function getLastName(): ?string
-    {
-        return $this->LastName;
-    }
-
-    public function setLastName(string $LastName): self
-    {
-        $this->LastName = $LastName;
-
-        return $this;
-    }
 
     public function getDni(): ?string
     {
@@ -232,17 +232,6 @@ class Person
         return $this;
     }
 
-    public function getAddress(): ?Address
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?Address $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
 
     public function getCuit(): ?string
     {
@@ -267,6 +256,46 @@ class Person
 
         return $this;
     }
+
+    /**
+     * @return Collection|Address[]
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses[] = $address;
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        if ($this->addresses->contains($address)) {
+            $this->addresses->removeElement($address);
+        }
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+
 
 
 }
