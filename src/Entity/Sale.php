@@ -19,8 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put"},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"sale:read"}},
+ *     denormalizationContext={"groups"={"sale:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -40,7 +40,7 @@ class Sale
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $name;
 
@@ -48,14 +48,14 @@ class Sale
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $condition;
 
@@ -63,60 +63,60 @@ class Sale
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      * @Assert\PositiveOrZero
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Assert\PositiveOrZero
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $datePublication;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $dateExpiration;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $revised;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"sale:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"sale:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="SaleType")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $saleType;
 
     /**
      * @ORM\ManyToOne(targetEntity="Store")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale:read", "sale:write"})
      */
     private $store;
 

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
@@ -34,6 +35,10 @@ use App\Security\Role;
  *
  * @ApiFilter(BooleanFilter::class, properties={"isActive"})
  * @ApiFilter(SearchFilter::class, properties={"email":"partial"})
+ * @ApiFilter(PropertyFilter::class)
+ * @UniqueEntity(fields={"username"})
+ * @UniqueEntity(fields={"email"})
+ *
  */
 class User implements UserInterface
 {
@@ -48,7 +53,7 @@ class User implements UserInterface
      * Email from user.
      *
      * @ORM\Column(type="string", length=191, unique=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "person:read", "person:write", "store:read", "store:write"})
      * @Assert\NotBlank()
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
@@ -60,7 +65,6 @@ class User implements UserInterface
      * User's roles.
      *
      * @ORM\Column(type="json")
-     * @Groups({"user:write"})
      */
     private $roles = [];
 
@@ -96,7 +100,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=191, unique=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "person:read", "person:write", "store:read", "store:write"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $username;
@@ -104,7 +108,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "store:read", "store:write", "person:read", "person:write"})
      */
     private $isActive = true;
 

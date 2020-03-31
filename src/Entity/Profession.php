@@ -17,8 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put"},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"profession:read"}},
+ *     denormalizationContext={"groups"={"profession:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProfessionRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -37,35 +37,35 @@ class Profession
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"profession:read", "profession:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"profession:read", "profession:write"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"profession:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"profession:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="AcademicUnit")
      * @ORM\JoinColumn(name="academic_unit_id", referencedColumnName="id")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"profession:read", "profession:write"})
      */
     private $academicUnit;
 

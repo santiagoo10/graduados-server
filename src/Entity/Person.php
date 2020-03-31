@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use DateTimeInterface;
@@ -30,7 +31,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial","lastName":"partial"})
+ * @ApiFilter(PropertyFilter::class)
  */
 class Person
 {
@@ -47,7 +49,7 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write"})
      */
     private $name;
 
@@ -57,7 +59,7 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write"})
      */
     private $lastName;
 
@@ -66,7 +68,7 @@ class Person
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write"})
      */
     private $dni;
 
@@ -75,7 +77,7 @@ class Person
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write"})
      */
     private $cuit;
 
@@ -83,7 +85,7 @@ class Person
      * Cell phone.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write"})
      */
     private $cellPhone;
 
@@ -95,7 +97,7 @@ class Person
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $email;
@@ -123,7 +125,7 @@ class Person
      * User of the person
      *
      * @ORM\OneToOne(targetEntity="User")
-     * @Groups({"person:read", "person:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "user:read", "user:write"})
      */
     private $user;
 

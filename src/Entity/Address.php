@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,13 +18,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put", "delete"},
+ *     itemOperations={"get", "put", "delete"={"method"="DELETE"} },
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"address:read"}},
- *     denormalizationContext={"groups"={"address:write"}}
+ *     normalizationContext={"groups"={"address:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"address:write"}, "swagger_definition_name"="Write"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
+ * @ApiFilter(PropertyFilter::class)
  */
 class Address
 {
@@ -37,49 +40,49 @@ class Address
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"address:read", "address:write", "person:read", "person:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write","store:read",  "store:write"})
      */
     private $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
      */
     private $routeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
      */
     private $routeNumber;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
      */
     private $km;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write"})
+     * @Groups({"address:read", "address:write", "store:write", "store:read"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write"})
+     * @Groups({"address:read", "address:write", "store:write", "store:read"})
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"address:read", "address:write" , "person:read", "person:write"})
+     * @Groups({"address:read", "address:write" , "person:read", "person:write", "store:write", "store:read"})
      */
     private $phoneNumber;
 
@@ -99,12 +102,13 @@ class Address
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
-     * @Groups({"address:read", "address:write", "person:read", "person:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
      */
     private $zone;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Person", mappedBy="addresses")
+     *
      */
     private $people;
 

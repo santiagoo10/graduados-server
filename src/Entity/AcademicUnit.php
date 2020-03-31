@@ -17,8 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put"},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"academic_unit:read"}},
+ *     denormalizationContext={"groups"={"academic_unit:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\AcademicUnitRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -39,7 +39,7 @@ class AcademicUnit
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
     private $name;
 
@@ -48,7 +48,7 @@ class AcademicUnit
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
     private $phone;
 
@@ -61,7 +61,7 @@ class AcademicUnit
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
     private $email;
 
@@ -70,7 +70,7 @@ class AcademicUnit
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"academic_unit:read", "profession:read"})
      */
     private $createdAt;
 
@@ -79,7 +79,7 @@ class AcademicUnit
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"academic_unit:read", "profession:read"})
      */
     private $updatedAt;
 
@@ -88,16 +88,16 @@ class AcademicUnit
      *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="contacto_id", referencedColumnName="id")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
     private $contact;
 
     /**
      * Addres of the Unit academic.
      *
-     * @ORM\ManyToOne(targetEntity="Address")
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
     private $address;
 

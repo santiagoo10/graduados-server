@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -15,11 +16,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"store:read"}},
- *     denormalizationContext={"groups"={"strore:write"}}
+ *     normalizationContext={"groups"={"store:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"store:write"}, "swagger_definition_name"= "Write"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
- * @ApiFilter(SearchFilter::class, properties={"razonSocial":"partial"})
+ * @ApiFilter(SearchFilter::class, properties={"razonSocial":"partial", "cuit":"partial"})
+ * @ApiFilter(PropertyFilter::class)
  */
 class Store
 {
@@ -41,6 +43,8 @@ class Store
     private $razonSocial;
 
     /**
+     * id Argentina.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
      * @Groups({"store:read", "store:write"})
@@ -49,6 +53,8 @@ class Store
     private $cuit;
 
     /**
+     * Comertial email.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
@@ -58,26 +64,34 @@ class Store
     private $email;
 
     /**
+     * Comertial phone
+     *
      * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write"})
      */
     private $phone;
 
     /**
+     * Website.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "strore:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $website;
 
     /**
+     * Facebook.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "strore:write"})
+     * @Groups({"store:read", "store:write"})
      */
     private $facebook;
 
     /**
+     * Instagram.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
      * @Groups({"store:read", "store:write"})
@@ -85,6 +99,8 @@ class Store
     private $instagram;
 
     /**
+     * Twitter.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
      * @Groups({"store:read", "store:write"})
@@ -92,6 +108,8 @@ class Store
     private $twitter;
 
     /**
+     * MercadoLibre.
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
      * @Groups({"store:read", "store:write"})
@@ -99,14 +117,32 @@ class Store
     private $mercadolibre;
 
     /**
+     * Date was created store.
+     *
+     * @ORM\Column(type="datetime")
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"store:read"})
+     */
+    private $createdAt;
+
+    /**
+     * Date was updated store.
+     *
+     * @ORM\Column(type="datetime")
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Groups({"store:read"})
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Person")
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "person:read", "person:write"})
      */
     private $contact;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Address")
-     * @Groups({"store:read", "store:write"})
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
+     * @Groups({"store:read", "store:write", "address:read", "address:write" })
      */
     private $address;
 
@@ -246,4 +282,40 @@ class Store
 
         return $this;
     }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return $this
+     * @throws Exception
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt(): self
+    {
+        $this->createdAt = new DateTime();
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @return $this
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     * @throws Exception
+     */
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
 }
