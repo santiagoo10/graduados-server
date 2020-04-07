@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "normalization_context"={
  *              "groups"={"person:read"}
  *          }},
- *      "put", "delete"},
+ *      "put", "delete"={"method"="DELETE"} },
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"person:read"}},
  *     denormalizationContext={"groups"={"person:write"}}
@@ -49,7 +49,7 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write", "store:read", "store:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
     private $name;
 
@@ -59,7 +59,7 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write", "store:read", "store:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
     private $lastName;
 
@@ -68,7 +68,7 @@ class Person
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write", "store:read", "store:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
     private $dni;
 
@@ -77,7 +77,7 @@ class Person
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"person:read", "person:write", "store:read", "store:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
     private $cuit;
 
@@ -85,7 +85,7 @@ class Person
      * Cell phone.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"person:read", "person:write", "store:read", "store:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
     private $cellPhone;
 
@@ -97,7 +97,7 @@ class Person
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"person:read", "person:write", "store:read", "store:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $email;
@@ -124,14 +124,24 @@ class Person
     /**
      * User of the person
      *
-     * @ORM\OneToOne(targetEntity="User")
-     * @Groups({"person:read", "person:write", "store:read", "store:write", "user:read", "user:write"})
+     * @ORM\ManyToOne(targetEntity="User", cascade={"persist"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "user:read", "user:write", "academic_unit:read", "academic_unit:write"})
      */
     private $user;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Address", inversedBy="people", cascade={"persist"})
-     * @Groups({"person:read", "person:write", "address:read", "address:write"})
+     * @ORM\JoinTable(
+     *     name="person_address",
+     *     joinColumns={
+     *      @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     *      },
+     *     inverseJoinColumns={
+     *      @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     *     }
+     * )
+     * @Groups({"person:read", "person:write", "address:read", "address:write", "academic_unit:read", "academic_unit:write"})
+     * @Assert\Valid()
      */
     private $addresses;
 

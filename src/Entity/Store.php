@@ -37,7 +37,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $razonSocial;
@@ -47,7 +47,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      *
      */
     private $cuit;
@@ -59,7 +59,7 @@ class Store
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $email;
 
@@ -67,7 +67,7 @@ class Store
      * Comertial phone
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $phone;
 
@@ -76,7 +76,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $website;
 
@@ -85,7 +85,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $facebook;
 
@@ -94,7 +94,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $instagram;
 
@@ -103,7 +103,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $twitter;
 
@@ -112,7 +112,7 @@ class Store
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url
-     * @Groups({"store:read", "store:write"})
+     * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $mercadolibre;
 
@@ -136,13 +136,13 @@ class Store
 
     /**
      * @ORM\ManyToOne(targetEntity="Person")
-     * @Groups({"store:read", "store:write", "person:read", "person:write"})
+     * @Groups({"store:read", "store:write", "person:read", "person:write", "sale:read"})
      */
     private $contact;
 
     /**
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
-     * @Groups({"store:read", "store:write", "address:read", "address:write" })
+     * @Groups({"store:read", "store:write", "address:read", "address:write", "sale:read" })
      */
     private $address;
 

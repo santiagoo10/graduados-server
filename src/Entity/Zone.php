@@ -17,8 +17,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"zone:read"}},
+ *     denormalizationContext={"groups"={"zone:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ZoneRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -38,7 +38,7 @@ class Zone
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"zone:read", "zone:write", "address:read"})
      */
     private $code;
 
@@ -48,7 +48,7 @@ class Zone
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"zone:read", "zone:write", "address:read"})
      * @ApiProperty(iri="http://schema.org/name")
      *
      */
@@ -59,7 +59,7 @@ class Zone
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"zone:read", "zone:write", "address:read"})
      */
     private $type;
 
@@ -68,20 +68,20 @@ class Zone
      *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"zone:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"zone:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="City")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"zone:read", "zone:write", "address:read"})
      */
     private $city;
 

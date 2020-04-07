@@ -15,8 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put"},
  *     attributes={ "pagination_per_page"= 10},
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}}
+ *     normalizationContext={"groups"={"sale_type:read"}},
+ *     denormalizationContext={"groups"={"sale_type:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\SaleTypeRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -34,7 +34,7 @@ class SaleType
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
@@ -42,21 +42,21 @@ class SaleType
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"sale_type:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Groups({"user:read"})
+     * @Groups({"sale_type:read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      */
     private $description;
 

@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put",  "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"academic_unit:read"}},
  *     denormalizationContext={"groups"={"academic_unit:write"}}
@@ -86,9 +86,10 @@ class AcademicUnit
     /**
      * Contact person for technical supports.
      *
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinColumn(name="contacto_id", referencedColumnName="id")
      * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
+     * @Assert\Valid()
      */
     private $contact;
 
@@ -98,6 +99,7 @@ class AcademicUnit
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
+     * @Assert\Valid()
      */
     private $address;
 

@@ -45,7 +45,7 @@ class Country
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
-     * @Groups({"country:read", "country:write", "province:read", "province:write"})
+     * @Groups({"country:read", "country:write", "province:read"})
      */
     private $code;
 
@@ -56,7 +56,7 @@ class Country
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"country:read", "country:write", "province:read", "province:write"})
+     * @Groups({"country:read", "country:write", "province:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;

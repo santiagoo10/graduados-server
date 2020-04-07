@@ -44,7 +44,7 @@ class City
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"city:read", "city:write"})
+     * @Groups({"city:read", "city:write", "zone:read"})
      * @ApiProperty(iri="http://schema.org/name")
      *
      */
@@ -70,7 +70,7 @@ class City
 
     /**
      * @ORM\ManyToOne(targetEntity="Province")
-     * @Groups({"city:read", "city:write"})
+     * @Groups({"city:read", "city:write", "zone:read"})
      */
     private $province;
 

@@ -40,49 +40,49 @@ class Address
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"address:read", "address:write", "person:read", "person:write","store:read",  "store:write"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
     private $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $routeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $routeNumber;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $km;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"address:read", "address:write" , "person:read", "person:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write" , "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
      */
     private $phoneNumber;
 
@@ -102,7 +102,7 @@ class Address
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read"})
      */
     private $zone;
 

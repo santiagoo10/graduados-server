@@ -42,7 +42,7 @@ class Province
      * Province code.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"province:read", "province:write"})
+     * @Groups({"province:read", "province:write", "city:read"})
      *
      */
     private $code;
@@ -53,7 +53,7 @@ class Province
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"province:read", "province:write"})
+     * @Groups({"province:read", "province:write", "city:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
@@ -63,7 +63,7 @@ class Province
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"province:read", "province:write"})
+     * @Groups({"province:read", "province:write", "city:read"})
      */
     private $abbreviation;
 
@@ -86,9 +86,9 @@ class Province
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Country", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Country")
      * @Assert\Valid()
-     * @Groups({"province:read", "province:write" , "country:write", "country:read"})
+     * @Groups({"province:read", "province:write" , "city:read"})
      *
      */
     private $country;
