@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -40,6 +41,7 @@ class AcademicUnit
      * @Assert\NotBlank()
      * @Assert\Type("string")
      * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
+     * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
 
@@ -88,13 +90,13 @@ class AcademicUnit
      *
      * @ORM\ManyToOne(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinColumn(name="contacto_id", referencedColumnName="id")
-     * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
+     * @Groups({"academic_unit:read", "academic_unit:write"})
      * @Assert\Valid()
      */
     private $contact;
 
     /**
-     * Addres of the Unit academic.
+     * Address of the Unit academic.
      *
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")

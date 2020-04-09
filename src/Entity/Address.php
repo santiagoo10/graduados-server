@@ -37,6 +37,17 @@ class Address
     private $id;
 
     /**
+     * Name.
+     *
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
+     * @Groups({"address:read", "address:write", "academic_unit:read","academic_unit:write"})
+     * @ApiProperty(iri="http://schema.org/name")
+     */
+    private $name;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
@@ -102,7 +113,8 @@ class Address
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read"})
+     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read","academic_unit:write", "academic_unit:read"})
+     * @Assert\Valid()
      */
     private $zone;
 
@@ -290,6 +302,18 @@ class Address
             $this->people->removeElement($person);
             $person->removeAddress($this);
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

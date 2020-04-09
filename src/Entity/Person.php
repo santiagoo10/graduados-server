@@ -41,7 +41,7 @@ class Person
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * First name.
@@ -51,7 +51,7 @@ class Person
      * @Assert\Type("string")
      * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
-    private $name;
+    protected $name;
 
     /**
      * Last names.
@@ -61,7 +61,8 @@ class Person
      * @Assert\Type("string")
      * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
-    private $lastName;
+    protected $lastName;
+
 
     /**
      * Document unique identification(Argentina).
@@ -70,7 +71,7 @@ class Person
      * @Assert\Type("string")
      * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
-    private $dni;
+    protected $dni;
 
     /**
      * Cuit Argentina
@@ -79,7 +80,7 @@ class Person
      * @Assert\Type("string")
      * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
-    private $cuit;
+    protected $cuit;
 
     /**
      * Cell phone.
@@ -87,7 +88,7 @@ class Person
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      */
-    private $cellPhone;
+    protected $cellPhone;
 
     /**
      * Email. If person is user then same user::email
@@ -100,7 +101,7 @@ class Person
      * @Groups({"person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $email;
+    protected $email;
 
     /**
      * Date when person has been created in the sistem.
@@ -109,7 +110,7 @@ class Person
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"person:read"})
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * Date when person has been updated in the sistem.
@@ -118,16 +119,16 @@ class Person
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"person:read"})
      */
-    private $updatedAt;
+    protected $updatedAt;
 
 
     /**
      * User of the person
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"persist"})
-     * @Groups({"person:read", "person:write", "store:read", "store:write", "user:read", "user:write", "academic_unit:read", "academic_unit:write"})
+     * @Groups({"person:read", "person:write", "store:read", "store:write", "user:read", "user:write"})
      */
-    private $user;
+    protected $user;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Address", inversedBy="people", cascade={"persist"})
@@ -143,7 +144,7 @@ class Person
      * @Groups({"person:read", "person:write", "address:read", "address:write", "academic_unit:read", "academic_unit:write"})
      * @Assert\Valid()
      */
-    private $addresses;
+    protected $addresses;
 
     public function __construct()
     {
