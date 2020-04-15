@@ -30,14 +30,23 @@ use App\Security\Role;
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}}
  * )
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\HasLifecycleCallbacks()
  *
  * @ApiFilter(BooleanFilter::class, properties={"isActive"})
  * @ApiFilter(SearchFilter::class, properties={"email":"partial"})
  * @ApiFilter(PropertyFilter::class)
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
+ *
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({
+ *     "graduate" = "Graduate",
+ *     "user"="User",
+ *     "admin"="Admin",
+ *     "owner"="Owner"
+ * })
  *
  */
 class User implements UserInterface
@@ -47,26 +56,32 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * Email from user.
      *
      * @ORM\Column(type="string", length=191, unique=true)
-     * @Groups({"user:read", "user:write", "person:read", "person:write", "store:read", "store:write"})
+     * @Groups({
+     *     "graduate:read", "graduate:write",
+     *     "user:read", "user:write",
+     *     "store:read", "store:write",
+     *     "admin:read", "admin:write",
+     *     "owner:read", "owner:write"
+     * })
      * @Assert\NotBlank()
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
      */
-    private $email;
+    protected $email;
 
     /**
      * User's roles.
      *
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    protected $roles = [];
 
     /**
      * Date when the user has created.
@@ -75,7 +90,7 @@ class User implements UserInterface
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"user:read"})
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * Date when the user has been updated.
@@ -84,40 +99,51 @@ class User implements UserInterface
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"user:read"})
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * User password.
      *
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups({"user:write"})
+     * @Groups({"user:write", "admin:write", "graduate:write", "owner:write", "store:write"})
      */
-    private $password;
+    protected $password;
 
     /**
      * User name.
      *
      * @ORM\Column(type="string", length=191, unique=true)
      * @Assert\Type("string")
-     * @Groups({"user:read", "user:write", "person:read", "person:write", "store:read", "store:write"})
+     * @Groups({
+     *     "user:read", "user:write",
+     *     "store:read", "store:write",
+     *     "admin:read", "admin:write",
+     *     "graduate:read", "graduate:write",
+     *     "owner:read", "owner:write"
+     *     })
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $username;
+    protected $username;
 
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"user:read", "user:write", "store:read", "store:write", "person:read", "person:write"})
+     * @Groups({
+     *     "user:read", "user:write",
+     *     "store:read", "store:write",
+     *     "admin:read", "admin:write",
+     *     "graduate:read", "graduate:write",
+     *     "owner:read", "owner:write"
+     * })
      */
-    private $isActive = true;
+    protected $isActive = true;
 
 
-    public function __construct( $email)
+    public function __construct()
     {
 
 //        $this->id = Uuid::uuid4()->toString();
-        $this->setEmail($email);
         $this->roles[] = Role::ROLE_USER;
     }
 

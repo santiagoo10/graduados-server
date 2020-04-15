@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200322140953 extends AbstractMigration
+final class Version20200415114127 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,8 @@ final class Version20200322140953 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE store ADD contact_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE store ADD CONSTRAINT FK_FF575877E7A1254A FOREIGN KEY (contact_id) REFERENCES person (id)');
-        $this->addSql('CREATE INDEX IDX_FF575877E7A1254A ON store (contact_id)');
+        $this->addSql('CREATE TABLE owner (id INT NOT NULL, name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, dni VARCHAR(255) NOT NULL, cuit VARCHAR(255) NOT NULL, cell_phone VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE owner ADD CONSTRAINT FK_CF60E67CBF396750 FOREIGN KEY (id) REFERENCES user (id) ON DELETE CASCADE');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +31,6 @@ final class Version20200322140953 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE store DROP FOREIGN KEY FK_FF575877E7A1254A');
-        $this->addSql('DROP INDEX IDX_FF575877E7A1254A ON store');
-        $this->addSql('ALTER TABLE store DROP contact_id');
+        $this->addSql('DROP TABLE owner');
     }
 }

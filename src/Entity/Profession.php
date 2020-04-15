@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTime;
 use Exception;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"profession:read"}},
  *     denormalizationContext={"groups"={"profession:write"}}
@@ -34,14 +35,19 @@ class Profession
     private $id;
 
     /**
+     * Name
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
      * @Groups({"profession:read", "profession:write"})
+     * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
 
     /**
+     * Degree
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({"profession:read", "profession:write"})
@@ -49,6 +55,8 @@ class Profession
     private $type;
 
     /**
+     * Date when the Profession has been created in the sistem.
+     *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"profession:read"})
@@ -56,6 +64,8 @@ class Profession
     private $createdAt;
 
     /**
+     * Date when the Profession has been updated in the sistem.
+     *
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"profession:read"})
@@ -63,6 +73,8 @@ class Profession
     private $updatedAt;
 
     /**
+     * Unidad académica
+     *
      * @ORM\ManyToOne(targetEntity="AcademicUnit")
      * @ORM\JoinColumn(name="academic_unit_id", referencedColumnName="id")
      * @Groups({"profession:read", "profession:write"})

@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"sale:read"}},
  *     denormalizationContext={"groups"={"sale:write"}}
@@ -57,7 +57,7 @@ class Sale
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $condition;
+    private $conditionOfSale;
 
     /**
      * @ORM\Column(type="float")
@@ -210,17 +210,6 @@ class Sale
         return $this;
     }
 
-    public function getCondition(): ?string
-    {
-        return $this->condition;
-    }
-
-    public function setCondition(?string $condition): self
-    {
-        $this->condition = $condition;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?DateTimeInterface
     {
@@ -277,6 +266,18 @@ class Sale
     public function setStore(?Store $store): self
     {
         $this->store = $store;
+
+        return $this;
+    }
+
+    public function getConditionOfSale(): ?string
+    {
+        return $this->conditionOfSale;
+    }
+
+    public function setConditionOfSale(?string $conditionOfSale): self
+    {
+        $this->conditionOfSale = $conditionOfSale;
 
         return $this;
     }

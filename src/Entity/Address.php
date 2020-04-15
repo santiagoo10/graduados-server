@@ -8,8 +8,6 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use DateTime;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Exception;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,7 +40,12 @@ class Address
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"address:read", "address:write", "academic_unit:read","academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "academic_unit:read","academic_unit:write",
+     *     "store:read", "store:write",
+     *     "graduate:read", "graduate:write"
+     * })
      * @ApiProperty(iri="http://schema.org/name")
      */
     private $name;
@@ -51,49 +54,84 @@ class Address
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Type("string")
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:read", "store:write", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:read", "store:write",
+     *     "academic_unit:read", "academic_unit:write",
+     *     "graduate:read", "graduate:write"
+     *     })
      */
     private $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     *     "academic_unit:read", "academic_unit:write",
+     *     "graduate:read", "graduate:write"
+     *     })
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     *     "academic_unit:read", "academic_unit:write",
+     *     "graduate:read", "graduate:write"
+     *     })
      */
     private $routeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     *     "academic_unit:read", "academic_unit:write",
+     *     "graduate:read", "graduate:write"
+     *     })
+     *     })
      */
     private $routeNumber;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     *     "academic_unit:read", "academic_unit:write",
+     *     "graduate:read", "graduate:write"
+     *     })
+     * })
      */
     private $km;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write"
+     * })
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({"address:read", "address:write"})
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"address:read", "address:write" , "person:read", "person:write", "store:write", "store:read", "academic_unit:read", "academic_unit:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     *     "academic_unit:read", "academic_unit:write",
+     *     "graduate:read", "graduate:write"
+     *     })
+     * })
      */
     private $phoneNumber;
 
@@ -113,21 +151,17 @@ class Address
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
-     * @Groups({"address:read", "address:write", "person:read", "person:write", "store:write", "store:read","academic_unit:write", "academic_unit:read"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     *     "academic_unit:write", "academic_unit:read",
+     *     "graduate:read", "graduate:write"
+     *
+     * })
      * @Assert\Valid()
      */
     private $zone;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Person", mappedBy="addresses")
-     *
-     */
-    private $people;
-
-    public function __construct()
-    {
-        $this->people = new ArrayCollection();
-    }
 
 
     public function getId(): ?int
@@ -274,34 +308,6 @@ class Address
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new DateTime();
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Person[]
-     */
-    public function getPeople(): Collection
-    {
-        return $this->people;
-    }
-
-    public function addPerson(Person $person): self
-    {
-        if (!$this->people->contains($person)) {
-            $this->people[] = $person;
-            $person->addAddress($this);
-        }
-
-        return $this;
-    }
-
-    public function removePerson(Person $person): self
-    {
-        if ($this->people->contains($person)) {
-            $this->people->removeElement($person);
-            $person->removeAddress($this);
-        }
 
         return $this;
     }

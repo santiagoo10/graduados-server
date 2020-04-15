@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use App\Security\Role;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,14 +28,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass="App\Repository\GraduateRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Graduate
+class Graduate extends User
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -129,13 +124,51 @@ class Graduate
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Profession")
+     * @Groups({ "graduate:read", "graduate:write"})
      */
     private $professions;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({ "graduate:read", "graduate:write"})
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({ "graduate:read", "graduate:write"})
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({ "graduate:read", "graduate:write"})
+     */
+    private $dni;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({ "graduate:read", "graduate:write"})
+     */
+    private $cuit;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({ "graduate:read", "graduate:write"})
+     */
+    private $cellPhone;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Address")
+     * @Groups({ "graduate:read", "graduate:write"})
+     */
+    private $address;
 
     public function __construct()
     {
         parent::__construct();
         $this->professions = new ArrayCollection();
+        $this->roles[]= Role::ROLE_GRADUATE;
     }
 
 
@@ -333,8 +366,78 @@ class Graduate
         return $this;
     }
 
-    public function getId(): ?int
+    public function getName(): ?string
     {
-        return $this->id;
+        return $this->name;
     }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getDni(): ?string
+    {
+        return $this->dni;
+    }
+
+    public function setDni(string $dni): self
+    {
+        $this->dni = $dni;
+
+        return $this;
+    }
+
+    public function getCuit(): ?string
+    {
+        return $this->cuit;
+    }
+
+    public function setCuit(string $cuit): self
+    {
+        $this->cuit = $cuit;
+
+        return $this;
+    }
+
+    public function getCellPhone(): ?string
+    {
+        return $this->cellPhone;
+    }
+
+    public function setCellPhone(string $cellPhone): self
+    {
+        $this->cellPhone = $cellPhone;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+
+
 }

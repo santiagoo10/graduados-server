@@ -6,10 +6,14 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use DateTimeInterface;
+use DateTime;
+use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ApiResource(
@@ -22,6 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
  * @ApiFilter(SearchFilter::class, properties={"razonSocial":"partial", "cuit":"partial"})
  * @ApiFilter(PropertyFilter::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Store
 {
@@ -134,17 +139,22 @@ class Store
      */
     private $updatedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Person")
-     * @Groups({"store:read", "store:write", "person:read", "person:write", "sale:read"})
-     */
-    private $contact;
 
     /**
+     * Address
+     *
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
-     * @Groups({"store:read", "store:write", "address:read", "address:write", "sale:read" })
+     * @Groups({"store:read", "store:write", "sale:read" })
      */
     private $address;
+
+    /**
+     * Store owner
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Owner", cascade={"persist"})
+     * @Groups({"store:read", "store:write", "sale:read" })
+     */
+    private $owner;
 
     public function getId(): ?int
     {
@@ -259,17 +269,6 @@ class Store
         return $this;
     }
 
-    public function getContact(): ?Person
-    {
-        return $this->contact;
-    }
-
-    public function setContact(?Person $contact): self
-    {
-        $this->contact = $contact;
-
-        return $this;
-    }
 
     public function getAddress(): ?Address
     {
@@ -314,6 +313,18 @@ class Store
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
+    public function getOwner(): ?Owner
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?Owner $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

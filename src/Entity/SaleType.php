@@ -4,22 +4,28 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"sale_type:read"}},
  *     denormalizationContext={"groups"={"sale_type:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\SaleTypeRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  */
 class SaleType
 {
@@ -40,6 +46,13 @@ class SaleType
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
+     */
+    private $description;
+
+    /**
      * @ORM\Column(type="datetime")
      * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale_type:read"})
@@ -54,11 +67,14 @@ class SaleType
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @var MediaObject|null
+     *
+     * @ORM\ManyToOne(targetEntity=MediaObject::class, cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/image")
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      */
-    private $description;
+    public $image;
 
     public function getId(): ?int
     {
@@ -89,7 +105,7 @@ class SaleType
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -106,7 +122,7 @@ class SaleType
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -120,6 +136,18 @@ class SaleType
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
+    public function getImage(): ?MediaObject
+    {
+        return $this->image;
+    }
+
+    public function setImage(?MediaObject $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
