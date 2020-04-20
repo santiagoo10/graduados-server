@@ -15,6 +15,11 @@ class SecurityController extends AbstractController
      */
     public function login(){
 
+        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')){
+            return $this->json([
+                'error'=>'Invalid login request: check that the conection problem.'
+            ], 400);
+        }
         return $this->json(
             [
                 'user' => $this->getUser() ? $this->getUser()->getId() : null
