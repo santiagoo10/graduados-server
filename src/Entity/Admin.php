@@ -87,10 +87,6 @@ class Admin extends User
         $this->roles[] = Role::ROLE_ADMIN;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getName(): ?string
     {
