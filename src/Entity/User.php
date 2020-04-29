@@ -58,6 +58,7 @@ class User implements UserInterface
      * @Groups(
      *     "admin:read",
      * )
+     * @ApiProperty(iri="http://schema.org/identifier")
      */
     protected $id;
 
@@ -76,6 +77,7 @@ class User implements UserInterface
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
+     * @ApiProperty(iri="http://schema.org/email")
      */
     protected $email;
 
