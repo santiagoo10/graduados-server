@@ -130,6 +130,23 @@
     "fig/link-util": {
         "version": "1.1.0"
     },
+    "fzaninotto/faker": {
+        "version": "v1.9.1"
+    },
+    "hautelook/alice-bundle": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.1",
+            "ref": "71822522faf7ed2792d86b7f94ce73443358ccb9"
+        },
+        "files": [
+            "config/packages/dev/hautelook_alice.yaml",
+            "config/packages/test/hautelook_alice.yaml",
+            "fixtures/.gitignore"
+        ]
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -151,8 +168,24 @@
             "config/packages/lexik_jwt_authentication.yaml"
         ]
     },
+    "myclabs/deep-copy": {
+        "version": "1.9.5"
+    },
     "namshi/jose": {
         "version": "7.2.3"
+    },
+    "nelmio/alice": {
+        "version": "3.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.2",
+            "ref": "0b9900ece737bec7752e4155c0164639dd9b0cb0"
+        },
+        "files": [
+            "config/packages/dev/nelmio_alice.yaml",
+            "config/packages/test/nelmio_alice.yaml"
+        ]
     },
     "nelmio/api-doc-bundle": {
         "version": "3.0",
@@ -229,8 +262,23 @@
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
     },
+    "sebastian/comparator": {
+        "version": "4.0.0"
+    },
+    "sebastian/diff": {
+        "version": "4.0.1"
+    },
+    "sebastian/exporter": {
+        "version": "4.0.0"
+    },
+    "sebastian/recursion-context": {
+        "version": "4.0.0"
+    },
     "symfony/asset": {
         "version": "v5.0.5"
+    },
+    "symfony/browser-kit": {
+        "version": "v5.0.8"
     },
     "symfony/cache": {
         "version": "v5.0.5"
@@ -254,11 +302,17 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v5.0.8"
+    },
     "symfony/dependency-injection": {
         "version": "v5.0.5"
     },
     "symfony/doctrine-bridge": {
         "version": "v5.0.5"
+    },
+    "symfony/dom-crawler": {
+        "version": "v5.0.8"
     },
     "symfony/dotenv": {
         "version": "v5.0.5"
@@ -343,6 +397,21 @@
     "symfony/options-resolver": {
         "version": "v5.0.5"
     },
+    "symfony/phpunit-bridge": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "6d0e35f749d5f4bfe1f011762875275cd3f9874f"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
+    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.15.0"
     },
@@ -423,6 +492,9 @@
     "symfony/string": {
         "version": "v5.0.7"
     },
+    "symfony/test-pack": {
+        "version": "v1.0.6"
+    },
     "symfony/translation-contracts": {
         "version": "v2.0.1"
     },
@@ -500,6 +572,15 @@
     },
     "symfony/yaml": {
         "version": "v5.0.5"
+    },
+    "theofidry/alice-data-fixtures": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fe5a50faf580eb58f08ada2abe8afbd2d4941e05"
+        }
     },
     "twig/twig": {
         "version": "v3.0.3"

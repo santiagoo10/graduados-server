@@ -1,0 +1,6 @@
+App\Entity\User:
+  user_{1..10}:
+      email: <email()>
+      password: <text(5)>
+      username: <username()>
+      isActive: 'true'

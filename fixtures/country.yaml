@@ -1,0 +1,4 @@
+App\Entity\Country:
+    country_{1..10}:
+      code: <numberBetween(0, 5)>
+      name: <name()>
