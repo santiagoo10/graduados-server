@@ -1,0 +1,13 @@
+App\Entity\Admin:
+  admin_{1..10}:
+    name: <firstName()>
+    lastName: <lastName()>
+    dni: <es_ES:dni()>
+    cuit: <es_ES:dni()>
+    cellPhone: <es_ES:tollFreeNumber()>
+    position: <catchPhrase()>
+    job: <jobTitle()>
+    email: <email()>
+    password: <text(6)>
+    username: <username()>
+    isActive: 'true'
