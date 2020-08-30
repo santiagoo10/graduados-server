@@ -12,6 +12,8 @@
 
 ###> Oter's ###
 /.idea/*
+nbproject
+/nbproject/private/
 
 ###> Oter's ###
 

@@ -66,7 +66,7 @@ class Admin extends User
      * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"admin:read", "admin:write"})
      * @Assert\Length(
-     *      min = 10,
+     *      min = 8,
      *      max = 11,
      *      minMessage = "Your cuit must be at least 7 characters long",
      *      maxMessage = "Your cuit cannot be longer than 9 characters",

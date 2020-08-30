@@ -71,6 +71,7 @@ class City
     /**
      * @ORM\ManyToOne(targetEntity="Province")
      * @Groups({"city:read", "city:write", "zone:read"})
+     * 
      */
     private $province;
 
