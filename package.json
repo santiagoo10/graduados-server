@@ -1,8 +1,17 @@
 {
     "devDependencies": {
+        "@babel/preset-react": "^7.10.4",
         "@symfony/webpack-encore": "^0.28.2",
+        "babel-preset-react": "^6.24.1",
         "core-js": "^3.0.0",
+        "envify": "^4.1.0",
+        "eslint-plugin-react": "^7.19.0",
+        "prop-types": "^15.7.2",
+        "react-router-dom": "^5.2.0",
         "regenerator-runtime": "^0.13.2",
+        "terser": "^5.2.1",
+        "uglifyify": "^5.0.2",
+        "uuid": "^7.0.3",
         "vue-loader": "^15.9.1",
         "vue-template-compiler": "^2.6.11",
         "webpack-notifier": "^1.6.0"
@@ -17,9 +26,21 @@
     },
     "dependencies": {
         "@api-platform/admin": "^2.1.1",
+        "@api-platform/api-doc-parser": "^0.10.1",
+        "@blackbox-vision/ra-language-spanish": "^3.5.0",
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.3.2",
+        "@testing-library/user-event": "^7.1.2",
+        "babel-loader": "^8.1.0",
+        "jwt-decode": "^2.2.0",
+        "localtunnel": "^2.0.0",
         "react": "^16.13.1",
-        "react-admin": "^3.4.3",
+        "react-admin": "latest",
         "react-dom": "^16.13.1",
+        "react-scripts": "3.4.0",
         "vue": "^2.6.11"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
     }
 }
