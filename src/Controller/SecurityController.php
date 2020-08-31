@@ -31,9 +31,18 @@ class SecurityController extends AbstractController
         }
 
 
+        $location =  $iriConverter->getIriFromItem($user);
+//        $prueba = 'Hola response';
+
         return new Response(null, 204, [
-          'Location' => $iriConverter->getIriFromItem($user),
+          'Location' => $location ,
         ]);
+
+//        return $this->json([
+//                'roles' => $user->getRoles(),
+//                'username' => $user->getUsername(),
+//                'token' => $location
+//        ]);
     }
 
     /**
