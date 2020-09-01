@@ -153,6 +153,11 @@ class User implements UserInterface
      */
     protected $isActive = true;
 
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $apiToken;
+
 
     public function __construct()
     {
@@ -160,6 +165,7 @@ class User implements UserInterface
 //        $this->id = Uuid::uuid4()->toString();
         $this->roles[] = Role::ROLE_USER;
     }
+
 
     public function getId(): ?int
     {
@@ -313,6 +319,18 @@ class User implements UserInterface
     public function setPlainPassword(string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
+
         return $this;
     }
 
