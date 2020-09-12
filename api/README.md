@@ -11,3 +11,10 @@ Instalamos docker-compose (lo creamos dentro de la carpeta project pq symfony no
 
 Movemos todo al raiz
 - mv project/* .
+
+Configurar xdebug
+
+Instalar librerias
+- composer require monolog doctrine phpunit
+- composer require --dev browser-kit maker
+- composer require api
