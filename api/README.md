@@ -48,4 +48,17 @@ Configurar pahts de api platform
   -     serializer:
             mapping:
                 path:
-                    - '%kernel.project_dir%/config/api_platform/serialization'     
+                    - '%kernel.project_dir%/config/api_platform/serialization'  
+                    
+instalar libs para token y uid (para la parte de usuarios)
+- composer require symfony/security-core symfony/uid
+                
+creamos los mapeos del orm dentro de config/orm/mapping
+
+- siempre que se haga un update se ejecuta markAsUpdated
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preUpdate" method="markAsUpdated"/>
+        </lifecycle-callbacks>
+        
+        - en package/doctrine.yaml congiruramos el tipo de mapping anotation/archivo de mapping
+              
