@@ -58,6 +58,7 @@ class Country
      * @Assert\Type("string")
      * @Groups({"country:read", "country:write", "province:read"})
      * @ApiProperty(iri="http://schema.org/name")
+     * @ApiProperty(identifier=true)
      */
     private $name;
 

@@ -57,7 +57,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups(
-     *     "admin:read",
+     *     {"admin:read","owner:read", "store:read"}
      * )
      * @ApiProperty(iri="http://schema.org/identifier")
      */
@@ -114,8 +114,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     protected $password;
-
-
 
     /**
      * @var string The password

@@ -40,7 +40,7 @@ class Store
     /**
      * id Argentina
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({"store:read", "store:write", "sale:read"})
      * @ApiProperty(iri="http://schema.org/name")
@@ -50,7 +50,7 @@ class Store
     /**
      * id Argentina.
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({"store:read", "store:write", "sale:read"})
      *
@@ -60,7 +60,7 @@ class Store
     /**
      * Comertial email.
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
@@ -71,7 +71,7 @@ class Store
     /**
      * Comertial phone
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"store:read", "store:write", "sale:read"})
      */
     private $phone;
