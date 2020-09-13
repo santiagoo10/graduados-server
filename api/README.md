@@ -87,3 +87,16 @@ listener para caputarar exceptions, symfony por defecto mustra una plantilla , c
         
         
 agregamos el listener de exceptions a services.yaml
+
+
+creamos las migraciones
+- sf make:migration
+
+ejecutamos la migración
+- sf d:m:m -n
+
+instalamos librería para generar json web token
+- composer require lexik/jwt-authentication-bundle
+- configurar
+- chequear que todo este bien sf lexik:jwt:check-config
+

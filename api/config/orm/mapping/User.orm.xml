@@ -13,7 +13,7 @@
         <field name="createdAt" type="datetime"/>
         <field name="updatedAt" type="datetime"/>
 
-        <one-to-many field="categories" target-entity="App\Entity\Category" mapped-by="owner">
+<!--        <one-to-many field="categories" target-entity="App\Entity\Category" mapped-by="owner">
             <cascade>
                 <cascade-remove/>
             </cascade>
@@ -23,9 +23,9 @@
             <cascade>
                 <cascade-remove/>
             </cascade>
-        </one-to-many>
+        </one-to-many>-->
 
-        <many-to-many field="groups" target-entity="App\Entity\Group" inversed-by="users">
+<!--        <many-to-many field="groups" target-entity="App\Entity\Group" inversed-by="users">
             <cascade>
                 <cascade-remove/>
             </cascade>
@@ -37,7 +37,7 @@
                     <join-column name="group_id"/>
                 </inverse-join-columns>
             </join-table>
-        </many-to-many>
+        </many-to-many>-->
 
         <lifecycle-callbacks>
             <lifecycle-callback type="preUpdate" method="markAsUpdated"/>

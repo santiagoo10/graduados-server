@@ -159,48 +159,49 @@ class User implements UserInterface
         return $this->id === $user->getId();
     }
 
-    /**
-     * @return Collection|Group[]
-     */
-    public function getGroups(): Collection
-    {
-        return $this->groups;
-    }
+//    /**
+//     * @return Collection|Group[]
+//     */
+//    public function getGroups(): Collection
+//    {
+//        return $this->groups;
+//    }
+//
+//    public function addGroup(Group $group): void
+//    {
+//        if ($this->groups->contains($group)) {
+//            return;
+//        }
+//
+//        $this->groups->add($group);
+//    }
+//
+//    public function removeGroup(Group $group): void
+//    {
+//        if ($this->groups->contains($group)) {
+//            $this->groups->removeElement($group);
+//        }
+//    }
+//
+//    public function isMemberOfGroup(Group $group): bool
+//    {
+//        return $this->groups->contains($group);
+//    }
+//
+//    /**
+//     * @return Collection|Category[]
+//     */
+//    public function getCategories(): Collection
+//    {
+//        return $this->categories;
+//    }
+//
+//    /**
+//     * @return Collection|Movement[]
+//     */
+//    public function getMovements(): Collection
+//    {
+//        return $this->movements;
+//    }
 
-    public function addGroup(Group $group): void
-    {
-        if ($this->groups->contains($group)) {
-            return;
-        }
-
-        $this->groups->add($group);
-    }
-
-    public function removeGroup(Group $group): void
-    {
-        if ($this->groups->contains($group)) {
-            $this->groups->removeElement($group);
-        }
-    }
-
-    public function isMemberOfGroup(Group $group): bool
-    {
-        return $this->groups->contains($group);
-    }
-
-    /**
-     * @return Collection|Category[]
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    /**
-     * @return Collection|Movement[]
-     */
-    public function getMovements(): Collection
-    {
-        return $this->movements;
-    }
 }
