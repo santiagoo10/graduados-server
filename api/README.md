@@ -62,3 +62,28 @@ creamos los mapeos del orm dentro de config/orm/mapping
         
         - en package/doctrine.yaml congiruramos el tipo de mapping anotation/archivo de mapping
               
+creamos src/exeption para agregregar exeptions de dominio
+
+
+tell don't ask
+
+listener para caputarar exceptions, symfony por defecto mustra una plantilla , con el listener la convertimos a json
+- renombramos la carpeta controller a api
+- creamos Api/listener
+- vamos a config/services.yaml, cambiamos los path para autowire que es el inyector de dependencias
+
+    App\Api\:
+        resource: '../src/Api/'
+        tags: ['controller.service_arguments']
+        
+- vamos a route/anotations.yaml
+
+        controllers:
+            resource: ../../src/Api/
+            type: annotation
+            
+- para comprobar que todo funciona limpiamos la cache
+    - sf c:c
+        
+        
+agregamos el listener de exceptions a services.yaml
