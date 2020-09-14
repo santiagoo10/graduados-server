@@ -16,37 +16,10 @@ class UserRepository extends BaseRepository
         return User::class;
     }
 
-    public function findOneByIdOrFail(string $id): User
-    {
-        if (null === $user = $this->objectRepository->find($id)) {
-            throw UserNotFoundException::fromUserId($id);
-        }
-
-        return $user;
-    }
-
     public function findOneByEmailOrFail(string $email): User
     {
         if (null === $user = $this->objectRepository->findOneBy(['email' => $email])) {
             throw UserNotFoundException::fromEmail($email);
-        }
-
-        return $user;
-    }
-
-    public function findOneInactiveByIdAndTokenOrFail(string $id, string $token): User
-    {
-        if (null === $user = $this->objectRepository->findOneBy(['id' => $id, 'token' => $token, 'active' => false])) {
-            throw UserNotFoundException::fromUserIdAndToken($id, $token);
-        }
-
-        return $user;
-    }
-
-    public function findOneByIdAndResetPasswordToken(string $id, string $resetPasswordToken): User
-    {
-        if (null === $user = $this->objectRepository->findOneBy(['id' => $id, 'resetPasswordToken' => $resetPasswordToken])) {
-            throw UserNotFoundException::fromUserIdAndResetPasswordToken($id, $resetPasswordToken);
         }
 
         return $user;
