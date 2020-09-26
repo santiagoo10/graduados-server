@@ -130,11 +130,44 @@
     "exsyst/swagger": {
         "version": "v0.4.1"
     },
+    "fig/http-message-util": {
+        "version": "1.1.4"
+    },
     "fig/link-util": {
         "version": "1.1.0"
     },
+    "firebase/php-jwt": {
+        "version": "v5.2.0"
+    },
     "fzaninotto/faker": {
         "version": "v1.9.1"
+    },
+    "giggsey/libphonenumber-for-php": {
+        "version": "8.12.10"
+    },
+    "giggsey/locale": {
+        "version": "1.9"
+    },
+    "google/auth": {
+        "version": "v1.13.0"
+    },
+    "google/cloud-core": {
+        "version": "v1.39.0"
+    },
+    "google/cloud-storage": {
+        "version": "v1.23.0"
+    },
+    "google/crc32": {
+        "version": "v0.1.0"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "7.1.0"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
     },
     "hautelook/alice-bundle": {
         "version": "2.1",
@@ -152,6 +185,18 @@
     },
     "jms/metadata": {
         "version": "2.1.0"
+    },
+    "kreait/clock": {
+        "version": "1.0.1"
+    },
+    "kreait/firebase-bundle": {
+        "version": "2.2.0"
+    },
+    "kreait/firebase-php": {
+        "version": "5.8.1"
+    },
+    "kreait/firebase-tokens": {
+        "version": "1.10.0"
     },
     "ktamas77/firebase-php": {
         "version": "2.2.2"
@@ -173,6 +218,9 @@
     },
     "monolog/monolog": {
         "version": "2.1.1"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.6.0"
     },
     "myclabs/deep-copy": {
         "version": "1.9.5"
@@ -244,11 +292,23 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "ramsey/collection": {
         "version": "1.0.1"
@@ -267,6 +327,12 @@
         "files": [
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
+    },
+    "riverline/multipart-parser": {
+        "version": "2.0.8"
+    },
+    "rize/uri-template": {
+        "version": "0.3.2"
     },
     "sebastian/comparator": {
         "version": "4.0.0"

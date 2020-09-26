@@ -1,0 +1,16 @@
+kreait_firebase:
+  projects:
+    my_project:
+       credentials: '%kernel.project_dir%/config/graduados_credentials.json'
+       default: false
+       public: true
+       database_uri: 'https://graduados-a7240.firebaseio.com'
+        # Optional: Default domain for Dynamic Links
+#        default_dynamic_links_domain: 'https://my_project.page.link'
+        # Optional: Used to cache Google's public keys. Must implement
+        # \Psr\SimpleCache\CacheInterface (PSR-16)
+#        verifier_cache: null # Example: cache.app
+        # If set, logs simple HTTP request and response statuses
+#        http_request_logger:  null # Example: monolog.logger.firebase
+        # If set, logs detailed HTTP request and response statuses
+#        http_request_debug_logger: null # Example: monolog.logger.firebase_debug

@@ -157,10 +157,9 @@ class User implements UserInterface
     private $apiToken;
 
 
+
     public function __construct()
     {
-
-//        $this->id = Uuid::uuid4()->toString();
         $this->roles[] = Role::ROLE_USER;
     }
 
