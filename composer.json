@@ -4,7 +4,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.3.21",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/admin-pack": "^1.0",
@@ -35,8 +35,10 @@
         "symfony/maker-bundle": "^1.14",
         "symfony/profiler-pack": "^1.0",
         "symfony/test-pack": "^1.0"
+
     },
     "config": {
+        "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
         },
