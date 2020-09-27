@@ -43,7 +43,7 @@ services:
     ports:
       - 36000:3306
     environment:
-      MYSQL_DATABASE: symfony_db
+      MYSQL_DATABASE: graduados_db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
