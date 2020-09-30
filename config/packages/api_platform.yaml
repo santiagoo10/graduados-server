@@ -9,4 +9,6 @@ api_platform:
             apiKey:
                 name: Authorization
                 type: header
-#    enable_docs: false
+    title: Graduados API
+    version: 1.0
+    show_webby: false
