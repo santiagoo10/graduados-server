@@ -23,7 +23,7 @@ class UserFixtures extends Fixture
         $user->setUsername('admin');
         $user->setRoles([Role::ROLE_ADMIN, Role::ROLE_SUPER_ADMIN, Role::ROLE_USER]);
         $user->setEmail('admin@graduados.com');
-        $user->setPassword($this->passwordEncoder->encodePassword($user, '123456'));
+        $user->setPassword($this->passwordEncoder->encodePassword($user, '$argon2id$v=19$m=65536,t=4,p=1$cM1/aTDAA6ywgFwkwg7ejw$KNGD8FkoArxNEwEmClmLNUQ7p5PaiLtvmXqJylnH2wY'));
 
         $manager->persist($user);
         $manager->flush();
