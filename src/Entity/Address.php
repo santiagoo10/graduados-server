@@ -32,12 +32,12 @@ class Address
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * Name.
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
      * @Assert\Type("string")
      * @Groups({
@@ -48,7 +48,7 @@ class Address
      * })
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -61,7 +61,7 @@ class Address
      *     "graduate:read", "graduate:write"
      *     })
      */
-    private $street;
+    private ?string $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -72,42 +72,7 @@ class Address
      *     "graduate:read", "graduate:write"
      *     })
      */
-    private $number;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({
-     *     "address:read", "address:write",
-     *     "store:write", "store:read",
-     *     "academic_unit:read", "academic_unit:write",
-     *     "graduate:read", "graduate:write"
-     *     })
-     */
-    private $routeType;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({
-     *     "address:read", "address:write",
-     *     "store:write", "store:read",
-     *     "academic_unit:read", "academic_unit:write",
-     *     "graduate:read", "graduate:write"
-     *     })
-     *     })
-     */
-    private $routeNumber;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({
-     *     "address:read", "address:write",
-     *     "store:write", "store:read",
-     *     "academic_unit:read", "academic_unit:write",
-     *     "graduate:read", "graduate:write"
-     *     })
-     * })
-     */
-    private $km;
+    private ?int $number;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -115,13 +80,13 @@ class Address
      *     "address:read", "address:write"
      * })
      */
-    private $lat;
+    private ?float $latitude;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"address:read", "address:write"})
      */
-    private $lon;
+    private ?float $longitude;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -133,24 +98,23 @@ class Address
      *     })
      * })
      */
-    private $phoneNumber;
+    private ?string $phoneNumber;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"address:read"})
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"address:read"})
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Zone")
+     * @ORM\JoinColumn(nullable=true)
      * @Groups({
      *     "address:read", "address:write",
      *     "store:write", "store:read",
@@ -160,7 +124,7 @@ class Address
      * })
      * @Assert\Valid()
      */
-    private $zone;
+    private ?Zone $zone;
 
 
 
@@ -193,62 +157,28 @@ class Address
         return $this;
     }
 
-    public function getRouteType(): ?string
+
+
+    public function getLatitude(): ?float
     {
-        return $this->routeType;
+        return $this->latitude;
     }
 
-    public function setRouteType(string $routeType): self
+    public function setLatitude(float $latitude): self
     {
-        $this->routeType = $routeType;
+        $this->latitude = $latitude;
 
         return $this;
     }
 
-    public function getRouteNumber(): ?int
+    public function getLongitude(): ?float
     {
-        return $this->routeNumber;
+        return $this->longitude;
     }
 
-    public function setRouteNumber(int $routeNumber): self
+    public function setLongitude(float $longitude): self
     {
-        $this->routeNumber = $routeNumber;
-
-        return $this;
-    }
-
-    public function getKm(): ?int
-    {
-        return $this->km;
-    }
-
-    public function setKm(int $km): self
-    {
-        $this->km = $km;
-
-        return $this;
-    }
-
-    public function getLat(): ?float
-    {
-        return $this->lat;
-    }
-
-    public function setLat(float $lat): self
-    {
-        $this->lat = $lat;
-
-        return $this;
-    }
-
-    public function getLon(): ?float
-    {
-        return $this->lon;
-    }
-
-    public function setLon(float $lon): self
-    {
-        $this->lon = $lon;
+        $this->longitude = $longitude;
 
         return $this;
     }

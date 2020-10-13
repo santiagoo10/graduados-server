@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     denormalizationContext={"groups"={"store:write"}, "swagger_definition_name"= "Write"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
- * @ApiFilter(SearchFilter::class, properties={"razonSocial":"partial", "cuit":"partial"})
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial" })
  * @ApiFilter(PropertyFilter::class)
  * @ORM\HasLifecycleCallbacks()
  */
@@ -35,27 +35,21 @@ class Store
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
-     * id Argentina
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Type("string")
+     * Name
+     * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write", "sale:read"})
-     * @ApiProperty(iri="http://schema.org/name")
      */
-    private $razonSocial;
+    private ?string $name;
 
     /**
-     * id Argentina.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Type("string")
+     * Description
+     * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write", "sale:read"})
-     *
      */
-    private $cuit;
+    private ?string $description;
 
     /**
      * Comertial email.
@@ -66,7 +60,7 @@ class Store
      * )
      * @Groups({"store:read", "store:write", "sale:read"})
      */
-    private $email;
+    private ?string $email;
 
     /**
      * Comertial phone
@@ -74,70 +68,24 @@ class Store
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"store:read", "store:write", "sale:read"})
      */
-    private $phone;
+    private ?string $phone;
 
-    /**
-     * Website.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private $website;
-
-    /**
-     * Facebook.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private $facebook;
-
-    /**
-     * Instagram.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private $instagram;
-
-    /**
-     * Twitter.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private $twitter;
-
-    /**
-     * MercadoLibre.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private $mercadolibre;
 
     /**
      * Date was created store.
      *
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"store:read"})
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * Date was updated store.
      *
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"store:read"})
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
 
     /**
@@ -146,7 +94,7 @@ class Store
      * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
      * @Groups({"store:read", "store:write", "sale:read" })
      */
-    private $address;
+    private ?Address $address;
 
     /**
      * Store owner
@@ -154,35 +102,11 @@ class Store
      * @ORM\ManyToOne(targetEntity="App\Entity\Owner", cascade={"persist"})
      * @Groups({"store:read", "store:write", "sale:read" })
      */
-    private $owner;
+    private ?Owner $owner;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRazonSocial(): ?string
-    {
-        return $this->razonSocial;
-    }
-
-    public function setRazonSocial(string $razonSocial): self
-    {
-        $this->razonSocial = $razonSocial;
-
-        return $this;
-    }
-
-    public function getCuit(): ?string
-    {
-        return $this->cuit;
-    }
-
-    public function setCuit(string $cuit): self
-    {
-        $this->cuit = $cuit;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -205,66 +129,6 @@ class Store
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getWebsite(): ?string
-    {
-        return $this->website;
-    }
-
-    public function setWebsite(?string $website): self
-    {
-        $this->website = $website;
-
-        return $this;
-    }
-
-    public function getFacebook(): ?string
-    {
-        return $this->facebook;
-    }
-
-    public function setFacebook(?string $facebook): self
-    {
-        $this->facebook = $facebook;
-
-        return $this;
-    }
-
-    public function getInstagram(): ?string
-    {
-        return $this->instagram;
-    }
-
-    public function setInstagram(?string $instagram): self
-    {
-        $this->instagram = $instagram;
-
-        return $this;
-    }
-
-    public function getTwitter(): ?string
-    {
-        return $this->twitter;
-    }
-
-    public function setTwitter(?string $twitter): self
-    {
-        $this->twitter = $twitter;
-
-        return $this;
-    }
-
-    public function getMercadolibre(): ?string
-    {
-        return $this->mercadolibre;
-    }
-
-    public function setMercadolibre(?string $mercadolibre): self
-    {
-        $this->mercadolibre = $mercadolibre;
 
         return $this;
     }
@@ -325,6 +189,30 @@ class Store
     public function setOwner(?Owner $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

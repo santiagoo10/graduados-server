@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Graduate;
 use App\Entity\Sale;
+use App\Entity\Store;
 use App\Entity\User;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
@@ -16,8 +17,8 @@ use Kreait\Firebase\Auth;
 
 class UserCreatedSubscriber implements EventSubscriberInterface
 {
-    private $logger;
-    private $auth;
+    private LoggerInterface $logger;
+    private Auth $auth;
 
 
 
@@ -51,9 +52,16 @@ class UserCreatedSubscriber implements EventSubscriberInterface
             case ($value instanceof Sale):
                 $this->sendSalePost();
                 break;
+            case ($value instanceof Store):
+                $this->sendStorePost($value);
+                break;
         }
     }
 
+    public function sendStorePost(Store $store){
+       //TODO aparentemente sólo guarda los benecificios en la db firestore. Por lo tanto acá no debería hacer nada
+
+    }
     public function sendUserPost(User $user){
         //Todo enviar el user
         $this->logger->info('Envía un usuario');
@@ -69,6 +77,7 @@ class UserCreatedSubscriber implements EventSubscriberInterface
 
        try {
            $userRecord=$this->auth->createUserWithEmailAndPassword($graduate->getEmail(), '123456');
+//           $this->auth->l
 
 //           $this->logger->info('UID');
 //           $this->logger->info($userRecord->uid);
