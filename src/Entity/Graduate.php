@@ -36,139 +36,140 @@ class Graduate extends User
      * @Assert\Type("string")
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $work;
+    private ?string $work;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $position;
+    private ?string $position;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $continueStuding;
+    private ?bool $continueStuding;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $interest;
+    private ?string $interest;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $wantToLink;
+    private ?bool $wantToLink;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $agreementType;
+    private ?string $agreementType;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $wantToUnderTake;
+    private ?bool $wantToUnderTake;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $comment;
+    private ?string $comment;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $showEmail;
+    private ?bool $showEmail;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      */
-    private $bornDate;
+    private ?DateTimeInterface $bornDate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $facebook;
+    private ?string $facebook;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $instagram;
+    private ?string $instagram;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $twitter;
+    private ?string $twitter;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $personalSite;
+    private ?string $personalSite;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Profession")
-     * @Groups({ "graduate:read", "graduate:write"})
-     */
-    private $professions;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $lastName;
+    private ?string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $dni;
+    private ?string $dni;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $cuit;
+    private ?string $cuit;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $cellPhone;
+    private ?string $cellPhone;
+
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Address")
+     * @ORM\Column(type="string", length=255)
      * @Groups({ "graduate:read", "graduate:write"})
      */
-    private $address;
+    protected ?string $idFirebase = null;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Address::class)
+     * @Groups({ "graduate:read", "graduate:write", "adress:read", "adress:write"})
+     */
+    private Collection $address;
 
     public function __construct()
     {
         parent::__construct();
-        $this->professions = new ArrayCollection();
         $this->roles[]= Role::ROLE_GRADUATE;
+        $this->address = new ArrayCollection();
     }
 
 
@@ -340,31 +341,6 @@ class Graduate extends User
         return $this;
     }
 
-    /**
-     * @return Collection|Profession[]
-     */
-    public function getProfessions(): Collection
-    {
-        return $this->professions;
-    }
-
-    public function addProfession(Profession $profession): self
-    {
-        if (!$this->professions->contains($profession)) {
-            $this->professions[] = $profession;
-        }
-
-        return $this;
-    }
-
-    public function removeProfession(Profession $profession): self
-    {
-        if ($this->professions->contains($profession)) {
-            $this->professions->removeElement($profession);
-        }
-
-        return $this;
-    }
 
     public function getName(): ?string
     {
@@ -426,14 +402,41 @@ class Graduate extends User
         return $this;
     }
 
-    public function getAddress(): ?Address
+
+    public function getIdFirebase(): ?string
+    {
+        return $this->idFirebase;
+    }
+
+    public function setIdFirebase(string $idFirebase): self
+    {
+        $this->idFirebase = $idFirebase;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Address[]
+     */
+    public function getAddress(): Collection
     {
         return $this->address;
     }
 
-    public function setAddress(?Address $address): self
+    public function addAddress(Address $address): self
     {
-        $this->address = $address;
+        if (!$this->address->contains($address)) {
+            $this->address[] = $address;
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        if ($this->address->contains($address)) {
+            $this->address->removeElement($address);
+        }
 
         return $this;
     }

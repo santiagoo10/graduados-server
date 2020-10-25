@@ -34,7 +34,7 @@ class Sale
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,7 +42,7 @@ class Sale
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -50,75 +50,71 @@ class Sale
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $conditionOfSale;
+    private ?string $conditionOfSale;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      * @Assert\NotBlank()
      * @Assert\PositiveOrZero
      * @Groups({"sale:read", "sale:write"})
      */
-    private $price;
+    private ?float $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Assert\PositiveOrZero
      * @Groups({"sale:read", "sale:write"})
      */
-    private $discount;
+    private ?float $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read", "sale:write"})
      */
-    private $datePublication;
+    private ?DateTimeInterface $datePublication;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read", "sale:write"})
      */
-    private $dateExpiration;
+    private ?DateTimeInterface $dateExpiration;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"sale:read", "sale:write"})
      */
-    private $revised;
+    private ?bool $revised;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read"})
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read"})
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="SaleType")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $saleType;
+    private ?SaleType $saleType;
 
     /**
      * @ORM\ManyToOne(targetEntity="Store")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $store;
+    private ?Store $store;
 
     public function getId(): ?int
     {

@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Graduate;
+use App\Entity\Owner;
 use App\Entity\Sale;
 use App\Entity\Store;
 use App\Entity\User;
@@ -36,26 +37,42 @@ class UserCreatedSubscriber implements EventSubscriberInterface
     }
 
     public function sendPost(ViewEvent $event){
-        $value = $event->getControllerResult();
-        switch (true){
-            case ($value instanceof User):
-                $roles= $value->getRoles();
-                switch (end($roles)){
-                    case 'ROLE_USER':
-                        $this->sendUserPost($value);
-                        break;
-                    case 'ROLE_GRADUATE':
-                        $this->sendGraduatePost($value );
-                        break;
-                }
-                break;
-            case ($value instanceof Sale):
-                $this->sendSalePost();
-                break;
-            case ($value instanceof Store):
-                $this->sendStorePost($value);
-                break;
+//        $value = $event->getControllerResult();
+//        switch (true){
+//            case ($value instanceof User):
+//                $roles= $value->getRoles();
+//                switch (end($roles)){
+//                    case 'ROLE_USER':
+//                        $this->sendUserPost($value);
+//                        break;
+//                    case 'ROLE_GRADUATE':
+//                        $this->sendGraduatePost($value );
+//                        break;
+//                    case 'ROLE_OWNER':
+//                        $this->sendOwnerPost($value );
+//                        break;
+//                }
+//                break;
+//            case ($value instanceof Sale):
+//                $this->sendSalePost($value);
+//                break;
+//            case ($value instanceof Store):
+//                $this->sendStorePost($value);
+//                break;
+//        }
+    }
+
+    public function sendOwnerPost(Owner $owner){
+
+        try {
+            $userRecord = $this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
+            $owner->setUidFirebase($userRecord);
+
+        } catch (AuthException $e) {
+        } catch (FirebaseException $e) {
         }
+
+
     }
 
     public function sendStorePost(Store $store){
@@ -68,29 +85,38 @@ class UserCreatedSubscriber implements EventSubscriberInterface
 
     }
 
-   public function sendSalePost(){
+   public function sendSalePost( Sale $sale){
+       $store = $sale->getStore();
+       $storeAdress = $store->getAddress();
+       $owner = $store->getOwner();
+       $data = [
+           'address' => $storeAdress->getStreet() . " " . $storeAdress->getNumber(),
+//           'createdAt' => $sale->getCreatedAt()
+//           'createdBy' => seguirrrrj
+
+       ];
+
        //Todo enviar el beneficio
        $this->logger->info('Envía un beneficio');
    }
 
    public function sendGraduatePost(Graduate $graduate ){
+        if(empty($graduate->getIdFirebase())){
+            try {
+                $userRecord=$this->auth->createUserWithEmailAndPassword($graduate->getEmail(), '123456');
+                $graduate->setIdFirebase($userRecord);
 
-       try {
-           $userRecord=$this->auth->createUserWithEmailAndPassword($graduate->getEmail(), '123456');
-//           $this->auth->l
 
-//           $this->logger->info('UID');
-//           $this->logger->info($userRecord->uid);
-//           $this->logger->info('contraseña');
-//           $this->logger->info($graduate->getPassword());
-//           $this->logger->info('contraseña plana');
-//           $this->logger->info($graduate->getPlainPassword());
 
-       } catch (AuthException $e) {
-           $this->logger->error($e->getMessage());
-       } catch (FirebaseException $e) {
-           $this->logger->error($e->getMessage());
-       }
+
+            } catch (AuthException $e) {
+                $this->logger->error($e->getMessage());
+            } catch (FirebaseException $e) {
+                $this->logger->error($e->getMessage());
+            }
+
+        }
+
 
        //Todo enviar el graduado
         $this->logger->info('Envía un graduado');
