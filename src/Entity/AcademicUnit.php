@@ -32,7 +32,7 @@ class AcademicUnit
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * Name of the academic unit or institute.
@@ -43,7 +43,7 @@ class AcademicUnit
      * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $name;
+    private ?string $name;
 
     /**
      * Phone of the atention to informatic personal.
@@ -52,7 +52,7 @@ class AcademicUnit
      * @Assert\NotBlank()
      * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
-    private $phone;
+    private ?string $phone;
 
     /**
      * Emmail for technical support.
@@ -65,7 +65,7 @@ class AcademicUnit
      * )
      * @Groups({"academic_unit:read", "academic_unit:write", "profession:read"})
      */
-    private $email;
+    private ?string $email;
 
     /**
      * Date when the Unit academic has been created in the sistem.

@@ -109,7 +109,7 @@ class User implements UserInterface
      * User password.
      *
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected string $password;
 

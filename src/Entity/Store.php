@@ -7,8 +7,11 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Security\Role;
 use DateTimeInterface;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -88,21 +91,26 @@ class Store
     private ?DateTimeInterface $updatedAt;
 
 
+
     /**
-     * Address
-     *
-     * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
-     * @Groups({"store:read", "store:write", "sale:read" })
+     * @ORM\ManyToMany(targetEntity=Address::class)
+     * @Groups({ "graduate:read", "graduate:write", "adress:read", "adress:write"})
      */
-    private ?Address $address;
+    private Collection $address;
 
     /**
      * Store owner
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Owner", cascade={"persist"})
-     * @Groups({"store:read", "store:write", "sale:read" })
+     * @ORM\ManyToMany(targetEntity=Owner::class, cascade={"persist"})
+     * @Groups({"store:read", "store:write", "sale:read", "owner:read", "owner:write", "user:read", "user:write" })
      */
-    private ?Owner $owner;
+    private Collection $owner;
+
+    public function __construct()
+    {
+        $this->address = new ArrayCollection();
+        $this->owner = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,19 +137,6 @@ class Store
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-
-    public function getAddress(): ?Address
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?Address $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -181,17 +176,6 @@ class Store
         return $this;
     }
 
-    public function getOwner(): ?Owner
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?Owner $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
 
     public function getName(): ?string
     {
@@ -214,6 +198,56 @@ class Store
     {
         $this->description = $description;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Address[]
+     */
+    public function getAddress(): Collection
+    {
+        return $this->address;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->address->contains($address)) {
+            $this->address[] = $address;
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        if ($this->address->contains($address)) {
+            $this->address->removeElement($address);
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Owner[]
+     */
+    public function getOwner(): Collection
+    {
+        return $this->owner;
+    }
+
+    public function addOwner(Owner $owner): self
+    {
+        if (!$this->owner->contains($owner)) {
+            $this->owner[] = $owner;
+        }
+
+        return $this;
+    }
+
+    public function removeOwner(Owner $owner): self
+    {
+        if ($this->owner->contains($owner)) {
+            $this->owner->removeElement($owner);
+        }
         return $this;
     }
 

@@ -78,28 +78,9 @@ class DatabaseActivitySubscriber implements EventSubscriber
         }
     }
 
-    public function sendOwnerPost(Owner $owner){
-
-        try {
-            $userRecord = $this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
-            // seguir acá porque no me devuelve un id sino un objext
-            $uid = $userRecord->uid;
-            $owner->setUidFirebase($uid);
-
-        } catch (AuthException $e) {
-        } catch (FirebaseException $e) {
-        }
-
-
-    }
 
     public function sendStorePost(Store $store){
         //TODO aparentemente sólo guarda los benecificios en la db firestore. Por lo tanto acá no debería hacer nada
-
-    }
-    public function sendUserPost(User $user){
-        //Todo enviar el user
-        $this->logger->info('Envía un usuario');
 
     }
 
@@ -118,6 +99,21 @@ class DatabaseActivitySubscriber implements EventSubscriber
         $this->logger->info('Envía un beneficio');
     }
 
+    public function sendOwnerPost(Owner $owner){
+        if(empty($owner->getIdFirebase())){
+            try {
+                $userRecord=$this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
+                $owner->setIdFirebase($userRecord->uid);
+            } catch (AuthException $e) {
+                $this->logger->error($e->getMessage());
+            } catch (FirebaseException $e) {
+                $this->logger->error($e->getMessage());
+            }
+
+        }
+        $this->logger->info('Envía un owner');
+    }
+
     public function sendGraduatePost(Graduate $graduate ){
         if(empty($graduate->getIdFirebase())){
             try {
@@ -132,6 +128,12 @@ class DatabaseActivitySubscriber implements EventSubscriber
         }
         //Todo enviar el graduado
         $this->logger->info('Envía un graduado');
+    }
+
+    public function sendUserPost(User $user){
+        //Todo enviar el user
+        $this->logger->info('Envía un usuario');
+
     }
 
 }

@@ -135,13 +135,13 @@ class Graduate extends User
     private ?string $lastName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
     private ?string $dni;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({ "graduate:read", "graduate:write"})
      */
     private ?string $cuit;

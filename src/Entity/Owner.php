@@ -91,10 +91,13 @@ class Owner extends User
     private ?string $cellPhone;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
+     * @Groups({
+     *     "owner:read", "owner:write",
+     *     "store:read", "store:write"
+     * })
      */
-    private ?string $uidFirebase;
-    
+    protected ?string $idFirebase = null;
 
 
     public function __construct()
@@ -169,14 +172,14 @@ class Owner extends User
         return $this;
     }
 
-    public function getUidFirebase(): ?string
+    public function getIdFirebase(): ?string
     {
-        return $this->uidFirebase;
+        return $this->idFirebase;
     }
 
-    public function setUidFirebase(?string $uidFirebase): self
+    public function setIdFirebase(string $idFirebase): self
     {
-        $this->uidFirebase = $uidFirebase;
+        $this->idFirebase = $idFirebase;
 
         return $this;
     }
