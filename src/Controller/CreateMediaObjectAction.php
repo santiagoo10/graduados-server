@@ -18,6 +18,7 @@ final class CreateMediaObjectAction
             throw new BadRequestHttpException('"file" is required');
         }
 
+
         $mediaObject = new MediaObject();
         $mediaObject->file = $uploadedFile;
 

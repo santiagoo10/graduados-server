@@ -78,20 +78,14 @@ class DatabaseActivitySubscriber implements EventSubscriber
         }
     }
 
-
-    public function sendStorePost(Store $store){
-        //TODO aparentemente sólo guarda los benecificios en la db firestore. Por lo tanto acá no debería hacer nada
-
-    }
-
     public function sendSalePost( Sale $sale){
         $store = $sale->getStore();
         $storeAdress = $store->getAddress();
         $owner = $store->getOwner();
         $data = [
             'address' => $storeAdress->getStreet() . " " . $storeAdress->getNumber(),
-//           'createdAt' => $sale->getCreatedAt()
-//           'createdBy' => seguirrrrj
+            'createdAt' => $sale->getCreatedAt(),
+            'createdBy' => $owner->getIdFirebase(),
 
         ];
 

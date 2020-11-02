@@ -34,7 +34,7 @@ class SaleType
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -43,38 +43,35 @@ class SaleType
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale_type:read"})
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale_type:read"})
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
     /**
      * @var MediaObject|null
      *
      * @ORM\ManyToOne(targetEntity=MediaObject::class, cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
-     * @ApiProperty(iri="http://schema.org/image")
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      */
-    public $image;
+    public ?MediaObject $image;
 
     public function getId(): ?int
     {
