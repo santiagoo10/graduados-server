@@ -116,6 +116,9 @@ class Sale
      */
     private ?Store $store;
 
+
+
+
     public function getId(): ?int
     {
         return $this->id;

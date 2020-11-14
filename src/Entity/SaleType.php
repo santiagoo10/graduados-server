@@ -7,13 +7,13 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ApiResource(
@@ -65,13 +65,16 @@ class SaleType
     private ?DateTimeInterface $updatedAt;
 
     /**
-     * @var MediaObject|null
-     *
-     * @ORM\ManyToOne(targetEntity=MediaObject::class, cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @var Collection<int, MediaObject>|MediaObject[]
+     * @ORM\ManyToMany (targetEntity=MediaObject::class)
+     * @ORM\JoinTable()
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      */
-    public ?MediaObject $image;
+    public Collection $images;
+
+    public function __construct(){
+       $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,15 +140,20 @@ class SaleType
         return $this;
     }
 
-    public function getImage(): ?MediaObject
+    /**
+     * @return Collection<int, MediaObject>|MediaObject[]
+     */
+    public function getImages(): Collection
     {
-        return $this->image;
+        return $this->images;
     }
 
-    public function setImage(?MediaObject $image): self
-    {
-        $this->image = $image;
-
-        return $this;
+    public function addImage(MediaObject $image){
+        $this->images->add($image);
     }
+
+    public function removeImage(MediaObject $image){
+        $this->images->remove($image);
+    }
+
 }

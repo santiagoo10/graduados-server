@@ -19,8 +19,14 @@ final class CreateMediaObjectAction
         }
 
 
+        //create the image instance
         $mediaObject = new MediaObject();
+
+
         $mediaObject->file = $uploadedFile;
+
+        //Probablemente acá tenga que encodearlo y guardarlo en la variable
+
 
         return $mediaObject;
     }
