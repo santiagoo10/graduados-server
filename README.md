@@ -19,6 +19,7 @@
  - make ssh-be para ingresar a la instancia
  - sf c:c (borrar cache)
  - sf doctrine:schema:create (crear la db manualmente)
+ - sf doctrine:fixtures:load (correr fixtures)
  - sf assets:install  (generar assets)
  
 4 - Generar licencias para JWT
