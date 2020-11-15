@@ -36,8 +36,8 @@ RUN mv php-cs-fixer /usr/local/bin/php-cs-fixer
 RUN mkdir -p /appdata/www
 
 #optmiza dependecias de composer
-USER appuser
-RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative \
-	&& composer clear-cache
+#USER appuser
+#RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative \
+	#&& composer clear-cache
 
 WORKDIR /appdata/www
