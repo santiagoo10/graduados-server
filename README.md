@@ -1,11 +1,12 @@
-Graduados Server
+#Graduados Server
 
-Herramientas
-git
-docker
-postman
-dry
+##Stack
+- git
+- docker
+- postman
+- dry
 
+##Entorno Local
 1 - Clonar el proyecto
  - git clone https://gitlab.com/renerecalde/oferta.git
  - git checkout develop
@@ -23,10 +24,23 @@ dry
 4 - Generar licencias para JWT
  - make generate-ssh-keys
 
-4 - Ir http://localhost:250/api/docs
+5 - Ir http://localhost:250/api/docs
 
 
+##Deploy Heroku
+###login heroku
+santiagoo10@gmail.com
+4896257.Hh
 
+- heroku apps:create graduados-api
 
+- Create Orocfile
+
+echo 'web: heroku-php-apache2 public/' > Procfile
+git add Procfile
+git commit -m "Heroku Procfile"
+
+- Configuración de Symfony para que se ejecute en el entorno prod
+heroku config:set APP_ENV=prod
 
 
