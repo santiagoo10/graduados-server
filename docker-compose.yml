@@ -1,0 +1,61 @@
+version: '3.5'
+
+services:
+  graduates-server-web:
+    container_name: graduates-server-web
+    build:
+      context: ./docker/nginx
+      args:
+        UID: $U_ID
+    ports:
+      - 250:80
+    volumes:
+      # punto de entrada de la app symfony
+      - ./public:/appdata/www/public
+    depends_on:
+      - graduates-server-be
+    networks:
+      - graduates-server-network
+
+  graduates-server-be:
+    container_name: graduates-server-be
+    build:
+      context: docker/php
+      args:
+        UID: $U_ID
+    environment:
+      PHP_IDE_CONFIG: serverName=Docker
+      PHP_XDEBUG_ENABLED: 1
+      XDEBUG_CONFIG: remote_host=172.17.0.1 remote_port=9005 # MacOS users
+    volumes:
+      - ./:/appdata/www
+      - ./docker/php/xdebug-linux.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ~/.ssh/id_rsa:/home/appuser/.ssh/id_rsa
+    depends_on:
+      - graduates-server-db
+    networks:
+      - graduates-server-network
+
+  graduates-server-db:
+    container_name: graduates-server-db
+    build:
+      context: ./docker/database
+    ports:
+      - 36000:3306
+    environment:
+      MYSQL_DATABASE: graduados_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    command: mysqld --sql_mode="STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION"
+    volumes:
+      - graduates-server-db-data:/var/lib/mysql
+    networks:
+      - graduates-server-network
+
+volumes:
+  graduates-server-db-data:
+
+networks:
+  graduates-server-network:
+    external: true

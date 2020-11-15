@@ -57,11 +57,11 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups(
-     *     "admin:read",
+     *     {"admin:read","owner:read", "store:read"}
      * )
      * @ApiProperty(iri="http://schema.org/identifier")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
      * Email from user.
@@ -80,32 +80,30 @@ class User implements UserInterface
      * )
      * @ApiProperty(iri="http://schema.org/email")
      */
-    protected $email;
+    protected ?string $email;
 
     /**
      * User's roles.
      *
      * @ORM\Column(type="json")
      */
-    protected $roles = [];
+    protected array $roles = [];
 
     /**
      * Date when the user has created.
      *
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"user:read"})
      */
-    protected $createdAt;
+    protected ?DateTimeInterface $createdAt;
 
     /**
      * Date when the user has been updated.
      *
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"user:read"})
      */
-    protected $updatedAt;
+    protected ?DateTimeInterface $updatedAt;
 
     /**
      * User password.
@@ -113,16 +111,14 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    protected $password;
-
-
+    protected string $password;
 
     /**
      * @var string The password
      * @Groups({"user:write", "admin:write", "graduate:write", "owner:write", "store:write"})
      * @SerializedName("password")
      */
-    protected $plainPassword;
+    protected string $plainPassword;
 
     /**
      * User name.
@@ -138,7 +134,7 @@ class User implements UserInterface
      *     })
      * @ApiProperty(iri="http://schema.org/name")
      */
-    protected $username;
+    protected string $username;
 
 
     /**
@@ -151,18 +147,17 @@ class User implements UserInterface
      *     "owner:read", "owner:write"
      * })
      */
-    protected $isActive = true;
+    protected bool $isActive = true;
 
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $apiToken;
+    private ?string $apiToken;
+
 
 
     public function __construct()
     {
-
-//        $this->id = Uuid::uuid4()->toString();
         $this->roles[] = Role::ROLE_USER;
     }
 
@@ -242,7 +237,7 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        $this->plainPassword = null;
+        //$this->plainPassword = null;
     }
 
     public function getCreatedAt(): ?DateTimeInterface
