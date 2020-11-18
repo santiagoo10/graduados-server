@@ -68,7 +68,7 @@ class SaleType
      * @var Collection<int, MediaObject>|MediaObject[]
      * @ORM\ManyToMany (targetEntity=MediaObject::class)
      * @ORM\JoinTable()
-     * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read" })
      */
     public Collection $images;
 

@@ -7,6 +7,7 @@ namespace App\EventSubscriber;
 use App\Entity\Graduate;
 use App\Entity\Owner;
 use App\Entity\Sale;
+use App\Entity\SaleType;
 use App\Entity\Store;
 use App\Entity\User;
 use Doctrine\Common\EventSubscriber;
@@ -51,9 +52,9 @@ class DatabaseActivitySubscriber implements EventSubscriber
 
         // if this subscriber only applies to certain entity types,
         // add some code to check the entity type as early as possible
-        if (!$entity instanceof User) {
-            return;
-        }
+//        if (!$entity instanceof User) {
+//            return;
+//        }
         switch (true){
             case ($entity instanceof User):
                 $roles= $entity->getRoles();
@@ -75,6 +76,18 @@ class DatabaseActivitySubscriber implements EventSubscriber
             case ($entity instanceof Store):
                 $this->sendStorePost($entity);
                 break;
+            case ($entity instanceof SaleType):
+                $this->sendSaleTypePost($entity);
+                break;
+        }
+    }
+
+    public function sendSaleTypePost(SaleType $saleType){
+        $images = $saleType->getImages();
+        foreach ($images as $image){
+            ///no iría acá sino en un post persist
+            $imageFile = file_get_contents($image->getFilePath());
+            $image64 = base64_encode($imageFile);
         }
     }
 
