@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6540eabefa39fc8090519d97dd4a3c5",
+    "content-hash": "ff28ac4acf2e361749de3063d16c3445",
     "packages": [
         {
             "name": "api-platform/admin-pack",
@@ -3407,7 +3407,7 @@
         },
         {
             "name": "nelmio/cors-bundle",
-            "version": "2.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioCorsBundle.git",
@@ -10623,7 +10623,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "nelmio/cors-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
