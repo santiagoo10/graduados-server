@@ -35,7 +35,7 @@ class DatabaseActivitySubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::prePersist,
+//            Events::prePersist,
         ];
     }
 

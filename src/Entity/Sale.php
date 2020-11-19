@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -116,8 +118,17 @@ class Sale
      */
     private ?Store $store;
 
+    /**
+     * @var Collection<int, MediaObject>|MediaObject[]
+     * @ORM\ManyToMany (targetEntity=MediaObject::class)
+     * @ORM\JoinTable()
+     * @Groups({"sale:read", "sale:write", "sale:read", "media_object_read" })
+     */
+    public Collection $images;
 
-
+    public function __construct(){
+        $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -279,5 +290,21 @@ class Sale
         $this->conditionOfSale = $conditionOfSale;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MediaObject>|MediaObject[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(MediaObject $image){
+        $this->images->add($image);
+    }
+
+    public function removeImage(MediaObject $image){
+        $this->images->remove($image);
     }
 }

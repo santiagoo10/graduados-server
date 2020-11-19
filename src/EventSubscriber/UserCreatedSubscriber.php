@@ -8,6 +8,7 @@ use App\Entity\Owner;
 use App\Entity\Sale;
 use App\Entity\Store;
 use App\Entity\User;
+use App\Repository\OwnerRepository;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Psr\Log\LoggerInterface;
@@ -15,18 +16,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Kreait\Firebase\Auth;
+use Doctrine\ORM\EntityManagerInterface;
 
 class UserCreatedSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
     private Auth $auth;
+    private OwnerRepository $ownerRepository;
+    private EntityManagerInterface $entityManager;
 
 
 
-    public function __construct(LoggerInterface $logger, Auth $auth)
+    public function __construct(LoggerInterface $logger, Auth $auth, OwnerRepository $ownerRepository,
+                                EntityManagerInterface $entityManager)
     {
         $this->logger = $logger;
         $this->auth = $auth;
+        $this->ownerRepository =  $ownerRepository;
+        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents()
@@ -37,39 +44,43 @@ class UserCreatedSubscriber implements EventSubscriberInterface
     }
 
     public function sendPost(ViewEvent $event){
-//        $value = $event->getControllerResult();
-//        switch (true){
-//            case ($value instanceof User):
-//                $roles= $value->getRoles();
-//                switch (end($roles)){
-//                    case 'ROLE_USER':
-//                        $this->sendUserPost($value);
-//                        break;
-//                    case 'ROLE_GRADUATE':
-//                        $this->sendGraduatePost($value );
-//                        break;
-//                    case 'ROLE_OWNER':
-//                        $this->sendOwnerPost($value );
-//                        break;
-//                }
-//                break;
-//            case ($value instanceof Sale):
+        $value = $event->getControllerResult();
+        switch (true){
+            case ($value instanceof User):
+                $roles= $value->getRoles();
+                switch (end($roles)){
+                    case 'ROLE_USER':
+                        $this->sendUserPost($value);
+                        break;
+                    case 'ROLE_GRADUATE':
+                        $this->sendGraduatePost($value );
+                        break;
+                    case 'ROLE_OWNER':
+                        $this->sendOwnerPost($value );
+                        break;
+                }
+                break;
+            case ($value instanceof Sale):
 //                $this->sendSalePost($value);
-//                break;
-//            case ($value instanceof Store):
-//                $this->sendStorePost($value);
-//                break;
-//        }
+                break;
+            case ($value instanceof Store):
+                $this->sendStorePost($value);
+                break;
+        }
     }
 
     public function sendOwnerPost(Owner $owner){
+        if($owner->getIdFirebase()){
+            try {
+                $userRecord = $this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
+                $owner->setUidFirebase($userRecord);
+                $this->entityManager->persist($owner);
+                $this->entityManager->flush();
 
-        try {
-            $userRecord = $this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
-            $owner->setUidFirebase($userRecord);
+            } catch (AuthException $e) {
+            } catch (FirebaseException $e) {
+            }
 
-        } catch (AuthException $e) {
-        } catch (FirebaseException $e) {
         }
 
 

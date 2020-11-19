@@ -91,7 +91,7 @@ class Owner extends User
     private ?string $cellPhone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({
      *     "owner:read", "owner:write",
      *     "store:read", "store:write"

@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Entity\Address;
 
 
 /**
@@ -90,14 +91,6 @@ class Store
      */
     private ?DateTimeInterface $updatedAt;
 
-
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Address::class)
-     * @Groups({ "graduate:read", "graduate:write", "adress:read", "adress:write"})
-     */
-    private Collection $address;
-
     /**
      * Store owner
      *
@@ -106,9 +99,15 @@ class Store
      */
     private Collection $owner;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"store:read", "store:write", "address:read", "address:read"})
+     */
+    private Address $address;
+
     public function __construct()
     {
-        $this->address = new ArrayCollection();
         $this->owner = new ArrayCollection();
     }
 
@@ -201,30 +200,6 @@ class Store
         return $this;
     }
 
-    /**
-     * @return Collection|Address[]
-     */
-    public function getAddress(): Collection
-    {
-        return $this->address;
-    }
-
-    public function addAddress(Address $address): self
-    {
-        if (!$this->address->contains($address)) {
-            $this->address[] = $address;
-        }
-
-        return $this;
-    }
-
-    public function removeAddress(Address $address): self
-    {
-        if ($this->address->contains($address)) {
-            $this->address->removeElement($address);
-        }
-        return $this;
-    }
 
     /**
      * @return Collection|Owner[]
@@ -248,6 +223,18 @@ class Store
         if ($this->owner->contains($owner)) {
             $this->owner->removeElement($owner);
         }
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
+
         return $this;
     }
 

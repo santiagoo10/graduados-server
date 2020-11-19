@@ -28,6 +28,6 @@ services:
 
     Kreait\Firebase\Auth: '@kreait_firebase.my_project.auth'
 
-    App\EventSubscriber\DatabaseActivitySubscriber:
-        tags:
-            - { name: 'doctrine.event_subscriber' }
+#    App\EventSubscriber\DatabaseActivitySubscriber:
+#        tags:
+#            - { name: 'doctrine.event_subscriber' }
