@@ -1,6 +1,6 @@
 {
-    "name": "renerecalde/oferta",
-    "description": "Sistema de Oferta",
+    "name": "graduados-api",
+    "description": "graduados api",
     "type": "project",
     "license": "proprietary",
     "require": {
@@ -67,8 +67,14 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
+        "ssh-scripts": {
+            "create-folder": "mkdir -p config/jwt",
+            "generate-private": "openssl genrsa -passout pass:b4a42db9c2995ae84a9e1fe8aae5b95f -out config/jwt/private.pem -aes256 4096",
+            "generate-public": "openssl rsa -pubout -passin pass:b4a42db9c2995ae84a9e1fe8aae5b95f -in config/jwt/private.pem -out config/jwt/public.pem"
+        },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "@ssh-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
