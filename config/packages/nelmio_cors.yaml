@@ -26,9 +26,11 @@ nelmio_cors:
         origin_regex: false
         forced_allow_origin_value: ~
     paths:
-        '^/api':
-            allow_origin: [ '*' ]
-            allow_headers: [ '*' ]
-            allow_methods: [ 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE' ]
-            max_age: 120
+        '^/api/':
+            origin_regex: true
+            allow_origin: ['^https://graduados-admin.herokuapp.com'] # You probably want to change this regex to match your real domain
+            allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+            allow_headers: ['Content-Type', 'Authorization']
+            expose_headers: ['Link']
+            max_age: 3600
         '^/': ~
