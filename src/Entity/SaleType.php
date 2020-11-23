@@ -7,13 +7,13 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ApiResource(
@@ -34,7 +34,7 @@ class SaleType
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -43,38 +43,38 @@ class SaleType
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale_type:read"})
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale_type:read"})
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
     /**
-     * @var MediaObject|null
-     *
-     * @ORM\ManyToOne(targetEntity=MediaObject::class, cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"sale_type:read", "sale_type:write", "sale:read"})
+     * @var Collection<int, MediaObject>|MediaObject[]
+     * @ORM\ManyToMany (targetEntity=MediaObject::class)
+     * @ORM\JoinTable()
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read" })
      */
-    public $image;
+    public Collection $images;
+
+    public function __construct(){
+       $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -140,15 +140,20 @@ class SaleType
         return $this;
     }
 
-    public function getImage(): ?MediaObject
+    /**
+     * @return Collection<int, MediaObject>|MediaObject[]
+     */
+    public function getImages(): Collection
     {
-        return $this->image;
+        return $this->images;
     }
 
-    public function setImage(?MediaObject $image): self
-    {
-        $this->image = $image;
-
-        return $this;
+    public function addImage(MediaObject $image){
+        $this->images->add($image);
     }
+
+    public function removeImage(MediaObject $image){
+        $this->images->remove($image);
+    }
+
 }

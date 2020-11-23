@@ -54,7 +54,7 @@ class MediaObject
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
      * @var string|null
@@ -62,7 +62,7 @@ class MediaObject
      * @ApiProperty(iri="http://schema.org/contentUrl")
      * @Groups({"media_object_read"})
      */
-    public $contentUrl;
+    public ?string $contentUrl;
 
     /**
      * @var File|null
@@ -70,13 +70,13 @@ class MediaObject
      * @Assert\NotNull(groups={"media_object_create"})
      * @Vich\UploadableField(mapping="media_object", fileNameProperty="filePath")
      */
-    public $file;
+    public ?File $file;
 
     /**
      * @var string|null
      * @ORM\Column( nullable=true)
      */
-    public $filePath;
+    public ?string $filePath;
 
     public function getId(): ?int
     {
@@ -94,6 +94,5 @@ class MediaObject
 
         return $this;
     }
-
 
 }

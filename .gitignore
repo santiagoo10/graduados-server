@@ -1,5 +1,5 @@
-
 ###> symfony/framework-bundle ###
+*.swp
 /.env.local
 /.env.local.php
 /.env.*.local
@@ -9,12 +9,10 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-
 ###> Oter's ###
 /.idea/*
 nbproject
 /nbproject/private/
-
 ###> Oter's ###
 
 ###> lexik/jwt-authentication-bundle ###
@@ -33,3 +31,8 @@ yarn-error.log
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> local config ###
+config/packages/nelmio_cors.yaml.local
+config/packages/nelmio_cors.yaml.repo
+###< local config ###

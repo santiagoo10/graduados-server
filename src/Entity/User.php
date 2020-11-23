@@ -109,7 +109,7 @@ class User implements UserInterface
      * User password.
      *
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected string $password;
 
@@ -237,7 +237,6 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        //$this->plainPassword = null;
     }
 
     public function getCreatedAt(): ?DateTimeInterface

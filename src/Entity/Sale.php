@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +36,7 @@ class Sale
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,7 +44,7 @@ class Sale
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -50,75 +52,83 @@ class Sale
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $conditionOfSale;
+    private ?string $conditionOfSale;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      * @Assert\NotBlank()
      * @Assert\PositiveOrZero
      * @Groups({"sale:read", "sale:write"})
      */
-    private $price;
+    private ?float $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Assert\PositiveOrZero
      * @Groups({"sale:read", "sale:write"})
      */
-    private $discount;
+    private ?float $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read", "sale:write"})
      */
-    private $datePublication;
+    private ?DateTimeInterface $datePublication;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read", "sale:write"})
      */
-    private $dateExpiration;
+    private ?DateTimeInterface $dateExpiration;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"sale:read", "sale:write"})
      */
-    private $revised;
+    private ?bool $revised;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read"})
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"sale:read"})
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="SaleType")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $saleType;
+    private ?SaleType $saleType;
 
     /**
      * @ORM\ManyToOne(targetEntity="Store")
      * @Groups({"sale:read", "sale:write"})
      */
-    private $store;
+    private ?Store $store;
+
+    /**
+     * @var Collection<int, MediaObject>|MediaObject[]
+     * @ORM\ManyToMany (targetEntity=MediaObject::class)
+     * @ORM\JoinTable()
+     * @Groups({"sale:read", "sale:write", "sale:read", "media_object_read" })
+     */
+    public Collection $images;
+
+    public function __construct(){
+        $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -280,5 +290,21 @@ class Sale
         $this->conditionOfSale = $conditionOfSale;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MediaObject>|MediaObject[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(MediaObject $image){
+        $this->images->add($image);
+    }
+
+    public function removeImage(MediaObject $image){
+        $this->images->remove($image);
     }
 }

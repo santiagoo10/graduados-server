@@ -27,3 +27,7 @@ services:
     # please note that last definitions always *replace* previous ones
 
     Kreait\Firebase\Auth: '@kreait_firebase.my_project.auth'
+
+#    App\EventSubscriber\DatabaseActivitySubscriber:
+#        tags:
+#            - { name: 'doctrine.event_subscriber' }
