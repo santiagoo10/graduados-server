@@ -39,7 +39,7 @@ class Owner extends User
      * })
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * LastNames
@@ -51,7 +51,7 @@ class Owner extends User
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $lastName;
+    private ?string $lastName;
 
     /**
      * Documento Nacional de Identidad Argentino
@@ -63,7 +63,7 @@ class Owner extends User
      *     "store:read", "store:write"
      * })
      */
-    private $dni;
+    private ?string $dni;
 
     /**
      * Código Unico Argentino
@@ -76,7 +76,7 @@ class Owner extends User
      *     "store:read", "store:write"
      * })
      */
-    private $cuit;
+    private ?string $cuit;
 
     /**
      * Cell phone
@@ -88,7 +88,16 @@ class Owner extends User
      *     "store:read", "store:write"
      * })
      */
-    private $cellPhone;
+    private ?string $cellPhone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({
+     *     "owner:read", "owner:write",
+     *     "store:read", "store:write"
+     * })
+     */
+    protected ?string $idFirebase = null;
 
 
     public function __construct()
@@ -159,6 +168,18 @@ class Owner extends User
     public function setCellPhone(string $cellPhone): self
     {
         $this->cellPhone = $cellPhone;
+
+        return $this;
+    }
+
+    public function getIdFirebase(): ?string
+    {
+        return $this->idFirebase;
+    }
+
+    public function setIdFirebase(string $idFirebase): self
+    {
+        $this->idFirebase = $idFirebase;
 
         return $this;
     }
