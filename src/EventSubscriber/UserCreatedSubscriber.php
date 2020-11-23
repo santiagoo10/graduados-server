@@ -16,24 +16,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Kreait\Firebase\Auth;
-use Doctrine\ORM\EntityManagerInterface;
+//use Doctrine\ORM\EntityManagerInterface;
 
 class UserCreatedSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
     private Auth $auth;
     private OwnerRepository $ownerRepository;
-    private EntityManagerInterface $entityManager;
+//    private EntityManagerInterface $entityManager;
 
 
 
-    public function __construct(LoggerInterface $logger, Auth $auth, OwnerRepository $ownerRepository,
-                                EntityManagerInterface $entityManager)
+    public function __construct(LoggerInterface $logger, Auth $auth, OwnerRepository $ownerRepository//,
+//                                EntityManagerInterface $entityManager
+    )
     {
         $this->logger = $logger;
         $this->auth = $auth;
         $this->ownerRepository =  $ownerRepository;
-        $this->entityManager = $entityManager;
+//        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents()
@@ -74,8 +75,8 @@ class UserCreatedSubscriber implements EventSubscriberInterface
             try {
                 $userRecord = $this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
                 $owner->setUidFirebase($userRecord);
-                $this->entityManager->persist($owner);
-                $this->entityManager->flush();
+//                $this->entityManager->persist($owner);
+//                $this->entityManager->flush();
 
             } catch (AuthException $e) {
             } catch (FirebaseException $e) {
