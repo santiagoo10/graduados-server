@@ -39,28 +39,30 @@ class Store
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private int $id;
 
     /**
      * Name
      * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write", "sale:read"})
+     * @Assert\NotNull()
+     *
      */
-    private ?string $name;
+    private string $name;
 
     /**
      * Description
      * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write", "sale:read"})
+     * @Assert\NotNull()
      */
-    private ?string $description;
+    private string $description;
 
     /**
      * Comertial email.
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email."
+     *     message = "The email '{{value}}' is not a valid email."
      * )
      * @Groups({"store:read", "store:write", "sale:read"})
      */
@@ -97,14 +99,14 @@ class Store
      * @ORM\ManyToMany(targetEntity=Owner::class, cascade={"persist"})
      * @Groups({"store:read", "store:write", "sale:read", "owner:read", "owner:write", "user:read", "user:write" })
      */
-    private Collection $owner;
+    private ?Collection $owner=null;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups({"store:read", "store:write", "address:read", "address:read"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Groups({"store:read", "store:write", "address:read", "address:write", "zone:read"})
      */
-    private Address $address;
+    private ?Address $address=null;
 
     public function __construct()
     {

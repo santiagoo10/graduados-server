@@ -32,13 +32,13 @@ class Address
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private int $id;
 
     /**
      * Name.
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull ()
      * @Assert\Type("string")
      * @Groups({
      *     "address:read", "address:write",
@@ -48,11 +48,11 @@ class Address
      * })
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private ?string $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotNull ()
      * @Assert\Type("string")
      * @Groups({
      *     "address:read", "address:write",
@@ -61,7 +61,7 @@ class Address
      *     "graduate:read", "graduate:write"
      *     })
      */
-    private ?string $street;
+    private string $street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -112,19 +112,18 @@ class Address
      */
     private ?DateTimeInterface $updatedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Zone")
-     * @ORM\JoinColumn(nullable=true)
-     * @Groups({
-     *     "address:read", "address:write",
-     *     "store:write", "store:read",
-     *     "academic_unit:write", "academic_unit:read",
-     *     "graduate:read", "graduate:write"
-     *
-     * })
-     * @Assert\Valid()
-     */
-    private ?Zone $zone;
+//    /**
+//     * @ORM\ManyToOne(targetEntity="Zone")
+//     * @ORM\JoinColumn(nullable=true)
+//     * @Groups({
+//     *     "address:read", "address:write",
+//     *     "store:write", "store:read",
+//     *     "academic_unit:write", "academic_unit:read",
+//     *     "graduate:read", "graduate:write"
+//     * })
+//     * @Assert\Valid()
+//     */
+//    private ?Zone $zone;
 
 
 
@@ -195,17 +194,17 @@ class Address
         return $this;
     }
 
-    public function getZone(): ?Zone
-    {
-        return $this->zone;
-    }
-
-    public function setZone(?Zone $zone): self
-    {
-        $this->zone = $zone;
-
-        return $this;
-    }
+//    public function getZone(): ?Zone
+//    {
+//        return $this->zone;
+//    }
+//
+//    public function setZone(?Zone $zone): self
+//    {
+//        $this->zone = $zone;
+//
+//        return $this;
+//    }
 
     public function getCreatedAt(): ?DateTimeInterface
     {

@@ -38,16 +38,16 @@ class Country
      * @ORM\Column(type="integer")
      * @ApiProperty(identifier=true)
      */
-    private $id;
+    private int $id;
 
     /**
      * Country Code.
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Groups({"country:read", "country:write", "province:read"})
      */
-    private $code;
+    private string $code;
 
 
     /**
@@ -60,7 +60,7 @@ class Country
      * @ApiProperty(iri="http://schema.org/name")
      * @ApiProperty(identifier=true)
      */
-    private $name;
+    private string $name;
 
     /**
      * Date when the Country has been created.
@@ -69,7 +69,7 @@ class Country
      * @var DateTime A "Y-m-d H:i:s" formatted value
      * @Groups({"country:read"})
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
      * Date when the Country has been updated.
@@ -78,7 +78,7 @@ class Country
      * @var DateTime A "Y-m-d H:i:s" formatted value
      * @Groups({"country:read"})
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
 
     public function getId(): ?int
