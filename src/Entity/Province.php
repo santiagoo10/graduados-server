@@ -34,7 +34,7 @@ class Province
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * Province code.
@@ -43,7 +43,7 @@ class Province
      * @Groups({"province:read", "province:write", "city:read"})
      *
      */
-    private $code;
+    private ?string $code;
 
     /**
      * Name.
@@ -54,7 +54,7 @@ class Province
      * @Groups({"province:read", "province:write", "city:read"})
      * @ApiProperty(iri="http://schema.org/name")
      */
-    private $name;
+    private ?string $name;
 
     /**
      * Abbreviation.
@@ -63,7 +63,7 @@ class Province
      * @Assert\Type("string")
      * @Groups({"province:read", "province:write", "city:read"})
      */
-    private $abbreviation;
+    private ?string $abbreviation;
 
     /**
      * Date when the Province has been created.
@@ -72,7 +72,7 @@ class Province
      * @var DateTime A "Y-m-d H:i:s" formatted value
      * @Groups({"province:read"})
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
      * Date when the Province has been updated.
@@ -81,7 +81,7 @@ class Province
      * @var DateTime A "Y-m-d H:i:s" formatted value
      * @Groups({"province:read"})
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Country")
@@ -89,7 +89,7 @@ class Province
      * @Groups({"province:read", "province:write" , "city:read"})
      *
      */
-    private $country;
+    private ?Country $country;
 
 
 

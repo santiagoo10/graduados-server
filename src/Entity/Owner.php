@@ -57,7 +57,6 @@ class Owner extends User
      * Documento Nacional de Identidad Argentino
      *
      * @ORM\Column(type="string", length=255)
-     *
      * @Groups({
      *     "owner:read", "owner:write",
      *     "store:read", "store:write"

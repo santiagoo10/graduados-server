@@ -96,10 +96,11 @@ class Store
     /**
      * Store owner
      *
-     * @ORM\ManyToMany(targetEntity=Owner::class, cascade={"persist"})
+     * @ORM\ManyToOne (targetEntity=Owner::class, cascade={"persist"})
+     * @Assert\Valid()
      * @Groups({"store:read", "store:write", "sale:read", "owner:read", "owner:write", "user:read", "user:write" })
      */
-    private ?Collection $owner=null;
+    private Owner $owner;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
@@ -110,8 +111,12 @@ class Store
 
     public function __construct()
     {
-        $this->owner = new ArrayCollection();
+        parent::__construct();
+        $this->owner = null;
+
     }
+
+
 
     public function getId(): ?int
     {
@@ -203,30 +208,19 @@ class Store
     }
 
 
-    /**
-     * @return Collection|Owner[]
-     */
-    public function getOwner(): Collection
+
+    public function getOwner(): Owner
     {
         return $this->owner;
     }
 
-    public function addOwner(Owner $owner): self
+    public function setOwner(Owner $owner): self
     {
-        if (!$this->owner->contains($owner)) {
-            $this->owner[] = $owner;
-        }
+        $this->owner = $owner;
 
         return $this;
     }
 
-    public function removeOwner(Owner $owner): self
-    {
-        if ($this->owner->contains($owner)) {
-            $this->owner->removeElement($owner);
-        }
-        return $this;
-    }
 
     public function getAddress(): ?Address
     {
