@@ -16,6 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource(
+ *
+ *     iri="http://schema.org/Country",
  *     collectionOperations={"get", "post"},
  *     itemOperations={
  *      "get"={

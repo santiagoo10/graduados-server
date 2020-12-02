@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  *
  * @ApiResource(
+ *
+ *     iri="http://schema.org/Admin",
  *     collectionOperations={
  *      "get" = {
  *          },

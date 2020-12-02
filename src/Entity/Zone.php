@@ -14,6 +14,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource(
+ *
+ *     iri="http://schema.org/Zone",
  *     collectionOperations={"get", "post"},
  *     itemOperations={
  *      "get"={

@@ -27,8 +27,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields={"dni"})
  * @UniqueEntity(fields={"cuit"})
  */
-class Owner extends User
+class Owner
 {
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private int $id;
 
     /**
      * Names
@@ -53,133 +59,6 @@ class Owner extends User
      */
     private ?string $lastName;
 
-    /**
-     * Documento Nacional de Identidad Argentino
-     *
-     * @ORM\Column(type="string", length=255)
-     * @Groups({
-     *     "owner:read", "owner:write",
-     *     "store:read", "store:write"
-     * })
-     */
-    private ?string $dni;
-
-    /**
-     * Código Unico Argentino
-     *
-     * @ORM\Column(type="string", length=255)
-     * @ApiProperty(iri="http://schema.org/name")
-     *
-     * @Groups({
-     *     "owner:read", "owner:write",
-     *     "store:read", "store:write"
-     * })
-     */
-    private ?string $cuit;
-
-    /**
-     * Cell phone
-     *
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Groups({
-     *     "owner:read", "owner:write",
-     *     "store:read", "store:write"
-     * })
-     */
-    private ?string $cellPhone;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({
-     *     "owner:read", "owner:write",
-     *     "store:read", "store:write"
-     * })
-     */
-    protected ?string $idFirebase = null;
 
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->roles[] = Role::ROLE_OWNER;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getDni(): ?string
-    {
-        return $this->dni;
-    }
-
-    public function setDni(string $dni): self
-    {
-        $this->dni = $dni;
-
-        return $this;
-    }
-
-    public function getCuit(): ?string
-    {
-        return $this->cuit;
-    }
-
-    public function setCuit(string $cuit): self
-    {
-        $this->cuit = $cuit;
-
-        return $this;
-    }
-
-    public function getCellPhone(): ?string
-    {
-        return $this->cellPhone;
-    }
-
-    public function setCellPhone(string $cellPhone): self
-    {
-        $this->cellPhone = $cellPhone;
-
-        return $this;
-    }
-
-    public function getIdFirebase(): ?string
-    {
-        return $this->idFirebase;
-    }
-
-    public function setIdFirebase(string $idFirebase): self
-    {
-        $this->idFirebase = $idFirebase;
-
-        return $this;
-    }
 }

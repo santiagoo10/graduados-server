@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     iri="http://schema.org/Province",
  *     collectionOperations={"get", "post"},
  *     itemOperations={
  *      "get"={

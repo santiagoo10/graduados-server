@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     iri="http://schema.org/Prefession",
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},

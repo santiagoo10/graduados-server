@@ -21,6 +21,7 @@ use App\Entity\Address;
 
 /**
  * @ApiResource(
+ *     iri="http://schema.org/Store",
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
@@ -96,11 +97,11 @@ class Store
     /**
      * Store owner
      *
-     * @ORM\ManyToOne (targetEntity=Owner::class, cascade={"persist"})
+     * @ORM\ManyToOne (targetEntity=User::class)
      * @Assert\Valid()
-     * @Groups({"store:read", "store:write", "sale:read", "owner:read", "owner:write", "user:read", "user:write" })
+     * @Groups({"store:read", "store:write", "sale:read", "user:read", "user:write" })
      */
-    private Owner $owner;
+    private User $owner;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
@@ -108,14 +109,6 @@ class Store
      * @Groups({"store:read", "store:write", "address:read", "address:write", "zone:read"})
      */
     private ?Address $address=null;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->owner = null;
-
-    }
-
 
 
     public function getId(): ?int
@@ -207,20 +200,17 @@ class Store
         return $this;
     }
 
-
-
-    public function getOwner(): Owner
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(Owner $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
         return $this;
     }
-
 
     public function getAddress(): ?Address
     {
