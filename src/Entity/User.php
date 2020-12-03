@@ -70,7 +70,7 @@ class User implements UserInterface
      * @Groups({
      *     "graduate:read", "graduate:write",
      *     "user:read", "user:write",
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "admin:read", "admin:write",
      * })
      * @Assert\NotBlank()
@@ -85,7 +85,7 @@ class User implements UserInterface
      * User's roles.
      *
      * @ORM\Column(type="json")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "store:read"})
      */
     protected array $roles = [];
 
@@ -115,7 +115,7 @@ class User implements UserInterface
 
     /**
      * @var string The password
-     * @Groups({"user:write", "admin:write", "graduate:write", "store:write"})
+     * @Groups({"user:write", "admin:write", "graduate:write"})
      * @SerializedName("password")
      */
     protected string $plainPassword;
@@ -127,7 +127,7 @@ class User implements UserInterface
      * @Assert\Type("string")
      * @Groups({
      *     "user:read", "user:write",
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "admin:read", "admin:write",
      *     "graduate:read", "graduate:write",
      *     })
@@ -140,7 +140,7 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      * @Groups({
      *     "user:read", "user:write",
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "admin:read", "admin:write",
      *     "graduate:read", "graduate:write",
      * })
@@ -155,7 +155,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "user:read", "user:write",
      * })
      */

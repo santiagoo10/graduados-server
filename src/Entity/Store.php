@@ -59,15 +59,6 @@ class Store
      */
     private string $description;
 
-    /**
-     * Comertial email.
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Email(
-     *     message = "The email '{{value}}' is not a valid email."
-     * )
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private ?string $email;
 
     /**
      * Comertial phone
@@ -94,14 +85,6 @@ class Store
      */
     private ?DateTimeInterface $updatedAt;
 
-    /**
-     * Store owner
-     *
-     * @ORM\ManyToOne (targetEntity=User::class)
-     * @Assert\Valid()
-     * @Groups({"store:read", "store:write", "sale:read", "user:read", "user:write" })
-     */
-    private User $owner;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
@@ -110,22 +93,18 @@ class Store
      */
     private ?Address $address=null;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"store:read", "store:write" })
+     *
+     */
+    private User $owner;
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
     }
 
     public function getPhone(): ?string
@@ -200,17 +179,6 @@ class Store
         return $this;
     }
 
-    public function getOwner(): User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
 
     public function getAddress(): ?Address
     {
@@ -220,6 +188,18 @@ class Store
     public function setAddress(Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
