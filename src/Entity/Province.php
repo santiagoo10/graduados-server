@@ -15,7 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     iri="http://schema.org/Province",
- *     collectionOperations={"get", "post"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={
  *      "get"={
  *          "normalization_context"={"groups"= {"province:read"}}},

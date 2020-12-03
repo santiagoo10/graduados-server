@@ -33,7 +33,7 @@ class Address
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id;
 
     /**
      * Name.
@@ -112,20 +112,6 @@ class Address
      * @Groups({"address:read"})
      */
     private ?DateTimeInterface $updatedAt;
-
-//    /**
-//     * @ORM\ManyToOne(targetEntity="Zone")
-//     * @ORM\JoinColumn(nullable=true)
-//     * @Groups({
-//     *     "address:read", "address:write",
-//     *     "store:write", "store:read",
-//     *     "academic_unit:write", "academic_unit:read",
-//     *     "graduate:read", "graduate:write"
-//     * })
-//     * @Assert\Valid()
-//     */
-//    private ?Zone $zone;
-
 
 
     public function getId(): ?int

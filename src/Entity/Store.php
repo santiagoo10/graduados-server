@@ -21,8 +21,9 @@ use App\Entity\Address;
 
 /**
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="http://schema.org/Store",
- *     collectionOperations={"get", "post"},
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"store:read"}, "swagger_definition_name"="Read"},
@@ -40,7 +41,7 @@ class Store
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id;
 
     /**
      * Name
@@ -96,10 +97,11 @@ class Store
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"store:read", "store:write" })
+     * @Assert\NotNull
+     * @Groups({"store:read", "store:write", "user:read" })
      *
      */
-    private User $owner;
+    private ?User $owner;
 
 
     public function getId(): ?int
