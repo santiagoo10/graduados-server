@@ -85,6 +85,7 @@ class User implements UserInterface
      * User's roles.
      *
      * @ORM\Column(type="json")
+     * @Groups({"user:read", "user:write"})
      */
     protected array $roles = [];
 
