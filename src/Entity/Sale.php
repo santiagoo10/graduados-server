@@ -55,27 +55,6 @@ class Sale
      */
     private ?string $description;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Type("string")
-     * @Groups({"sale:read", "sale:write"})
-     */
-    private ?string $conditionOfSale;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     * @Assert\NotBlank()
-     * @Assert\PositiveOrZero
-     * @Groups({"sale:read", "sale:write"})
-     */
-    private ?float $price;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     * @Assert\PositiveOrZero
-     * @Groups({"sale:read", "sale:write"})
-     */
-    private ?float $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -160,30 +139,6 @@ class Sale
         return $this;
     }
 
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getDiscount(): ?float
-    {
-        return $this->discount;
-    }
-
-    public function setDiscount(float $discount): self
-    {
-        $this->discount = $discount;
-
-        return $this;
-    }
 
     public function getDatePublication(): ?DateTimeInterface
     {
@@ -281,17 +236,6 @@ class Sale
         return $this;
     }
 
-    public function getConditionOfSale(): ?string
-    {
-        return $this->conditionOfSale;
-    }
-
-    public function setConditionOfSale(?string $conditionOfSale): self
-    {
-        $this->conditionOfSale = $conditionOfSale;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, MediaObject>|MediaObject[]
