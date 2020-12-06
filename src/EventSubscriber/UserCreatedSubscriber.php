@@ -16,25 +16,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Kreait\Firebase\Auth;
-//use Doctrine\ORM\EntityManagerInterface;
 
 class UserCreatedSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
     private Auth $auth;
     private OwnerRepository $ownerRepository;
-//    private EntityManagerInterface $entityManager;
 
 
 
     public function __construct(LoggerInterface $logger, Auth $auth, OwnerRepository $ownerRepository//,
-//                                EntityManagerInterface $entityManager
     )
     {
         $this->logger = $logger;
         $this->auth = $auth;
         $this->ownerRepository =  $ownerRepository;
-//        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents()
@@ -46,28 +42,28 @@ class UserCreatedSubscriber implements EventSubscriberInterface
 
     public function sendPost(ViewEvent $event){
         $value = $event->getControllerResult();
-        switch (true){
-            case ($value instanceof User):
-                $roles= $value->getRoles();
-                switch (end($roles)){
-                    case 'ROLE_USER':
-                        $this->sendUserPost($value);
-                        break;
-                    case 'ROLE_GRADUATE':
-                        $this->sendGraduatePost($value );
-                        break;
-                    case 'ROLE_OWNER':
-                        $this->sendOwnerPost($value );
-                        break;
-                }
-                break;
-            case ($value instanceof Sale):
+//        switch (true){
+//            case ($value instanceof User):
+//                $roles= $value->getRoles();
+//                switch (end($roles)){
+//                    case 'ROLE_USER':
+//                        $this->sendUserPost($value);
+//                        break;
+//                    case 'ROLE_GRADUATE':
+//                        $this->sendGraduatePost($value );
+//                        break;
+//                    case 'ROLE_OWNER':
+//                        $this->sendOwnerPost($value );
+//                        break;
+//                }
+//                break;
+//            case ($value instanceof Sale):
 //                $this->sendSalePost($value);
-                break;
-            case ($value instanceof Store):
-                $this->sendStorePost($value);
-                break;
-        }
+//                break;
+//            case ($value instanceof Store):
+//                $this->sendStorePost($value);
+//                break;
+//        }
     }
 
     public function sendOwnerPost(Owner $owner){

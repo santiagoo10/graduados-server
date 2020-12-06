@@ -25,7 +25,9 @@ use App\Security\Role;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     iri="http://schema.org/User",
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"user:read"}},
@@ -33,7 +35,7 @@ use App\Security\Role;
  * )
  *
  * @ApiFilter(BooleanFilter::class, properties={"isActive"})
- * @ApiFilter(SearchFilter::class, properties={"email":"partial"})
+ * @ApiFilter(SearchFilter::class, properties={"email":"partial", "username":"partial"})
  * @ApiFilter(PropertyFilter::class)
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
@@ -46,7 +48,6 @@ use App\Security\Role;
  *     "graduate" = "Graduate",
  *     "user"="User",
  *     "admin"="Admin",
- *     "owner"="Owner"
  * })
  *
  */
@@ -57,7 +58,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups(
-     *     {"admin:read","owner:read", "store:read"}
+     *     {"admin:read", "store:read"}
      * )
      * @ApiProperty(iri="http://schema.org/identifier")
      */
@@ -70,9 +71,8 @@ class User implements UserInterface
      * @Groups({
      *     "graduate:read", "graduate:write",
      *     "user:read", "user:write",
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "admin:read", "admin:write",
-     *     "owner:read", "owner:write"
      * })
      * @Assert\NotBlank()
      * @Assert\Email(
@@ -86,6 +86,7 @@ class User implements UserInterface
      * User's roles.
      *
      * @ORM\Column(type="json")
+     * @Groups({"user:read", "user:write", "store:read"})
      */
     protected array $roles = [];
 
@@ -115,7 +116,7 @@ class User implements UserInterface
 
     /**
      * @var string The password
-     * @Groups({"user:write", "admin:write", "graduate:write", "owner:write", "store:write"})
+     * @Groups({"user:write", "admin:write", "graduate:write"})
      * @SerializedName("password")
      */
     protected string $plainPassword;
@@ -127,10 +128,9 @@ class User implements UserInterface
      * @Assert\Type("string")
      * @Groups({
      *     "user:read", "user:write",
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "admin:read", "admin:write",
      *     "graduate:read", "graduate:write",
-     *     "owner:read", "owner:write"
      *     })
      * @ApiProperty(iri="http://schema.org/name")
      */
@@ -141,10 +141,9 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      * @Groups({
      *     "user:read", "user:write",
-     *     "store:read", "store:write",
+     *     "store:read",
      *     "admin:read", "admin:write",
      *     "graduate:read", "graduate:write",
-     *     "owner:read", "owner:write"
      * })
      */
     protected bool $isActive = true;
@@ -154,11 +153,35 @@ class User implements UserInterface
      */
     private ?string $apiToken;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({
+     *     "store:read",
+     *     "user:read", "user:write",
+     * })
+     */
+    protected ?string $idFirebase = null;
 
 
     public function __construct()
     {
         $this->roles[] = Role::ROLE_USER;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIdFirebase(): ?string
+    {
+        return $this->idFirebase;
+    }
+
+    /**
+     * @param string|null $idFirebase
+     */
+    public function setIdFirebase(?string $idFirebase): void
+    {
+        $this->idFirebase = $idFirebase;
     }
 
 
@@ -186,7 +209,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     /**
@@ -195,7 +218,6 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -213,7 +235,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -260,7 +282,6 @@ class User implements UserInterface
     {
         return $this->updatedAt;
     }
-
 
     /**
      * @return $this
