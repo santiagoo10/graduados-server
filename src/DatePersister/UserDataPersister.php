@@ -5,39 +5,50 @@ namespace App\DatePersister;
 
 
 
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\FirebaseException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Kreait\Firebase\Auth;
 
-class UserDataPersister implements DataPersisterInterface
+final class UserDataPersister implements ContextAwareDataPersisterInterface
 {
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $userPasswordEncoder;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
-    public function __construct( EntityManagerInterface $entityManager, UserPasswordEncoderInterface $userPasswordEncoder)
+    private Auth $auth;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        Auth $auth
+    )
     {
+        $this->auth = $auth;
         $this->entityManager = $entityManager;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    public function supports($data): bool
+    public function supports($data, array $context = []): bool
     {
         return $data instanceof User;
     }
 
     /**
      * @param User $data
+     * @param array $context
      * @return object|void
      */
-    public function persist($data)
+    public function persist($data, array $context = [])
     {
 
         if($data->getPlainPassword()){
@@ -47,11 +58,23 @@ class UserDataPersister implements DataPersisterInterface
             $data->eraseCredentials();
         }
 
+
+
+//        $userRecord = $this->auth->createUserWithEmailAndPassword($data->getEmail(), '123456');
+        try {
+            $userRecord = $this->auth->createUserWithEmailAndPassword($data->getEmail(), $data->getPlainPassword());
+            $data->setIdFirebase($userRecord->uid);
+        } catch (AuthException $e) {
+        } catch (FirebaseException $e) {
+        }
+
         $this->entityManager->persist($data);
         $this->entityManager->flush();
+
+        return $data;
     }
 
-    public function remove($data)
+    public function remove($data, array $context = [])
     {
         $this->entityManager->remove($data);
         $this->entityManager->flush();

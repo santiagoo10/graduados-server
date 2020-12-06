@@ -21,7 +21,9 @@ use App\Entity\Address;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     iri="http://schema.org/Store",
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"store:read"}, "swagger_definition_name"="Read"},
@@ -45,26 +47,19 @@ class Store
      * Name
      * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write", "sale:read"})
+     * @Assert\NotNull()
+     *
      */
-    private ?string $name;
+    private string $name;
 
     /**
      * Description
      * @ORM\Column(type="string", length=255)
      * @Groups({"store:read", "store:write", "sale:read"})
+     * @Assert\NotNull()
      */
-    private ?string $description;
+    private string $description;
 
-    /**
-     * Comertial email.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email."
-     * )
-     * @Groups({"store:read", "store:write", "sale:read"})
-     */
-    private ?string $email;
 
     /**
      * Comertial phone
@@ -91,41 +86,27 @@ class Store
      */
     private ?DateTimeInterface $updatedAt;
 
-    /**
-     * Store owner
-     *
-     * @ORM\ManyToMany(targetEntity=Owner::class, cascade={"persist"})
-     * @Groups({"store:read", "store:write", "sale:read", "owner:read", "owner:write", "user:read", "user:write" })
-     */
-    private Collection $owner;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups({"store:read", "store:write", "address:read", "address:read"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Groups({"store:read", "store:write", "address:read", "address:write", "zone:read"})
      */
-    private Address $address;
+    private ?Address $address=null;
 
-    public function __construct()
-    {
-        $this->owner = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
+     * @Groups({"store:read", "store:write", "user:read" })
+     *
+     */
+    private ?User $owner;
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
     }
 
     public function getPhone(): ?string
@@ -201,31 +182,6 @@ class Store
     }
 
 
-    /**
-     * @return Collection|Owner[]
-     */
-    public function getOwner(): Collection
-    {
-        return $this->owner;
-    }
-
-    public function addOwner(Owner $owner): self
-    {
-        if (!$this->owner->contains($owner)) {
-            $this->owner[] = $owner;
-        }
-
-        return $this;
-    }
-
-    public function removeOwner(Owner $owner): self
-    {
-        if ($this->owner->contains($owner)) {
-            $this->owner->removeElement($owner);
-        }
-        return $this;
-    }
-
     public function getAddress(): ?Address
     {
         return $this->address;
@@ -234,6 +190,18 @@ class Store
     public function setAddress(Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

@@ -17,7 +17,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     iri="http://schema.org/SaleType",
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"sale_type:read"}},

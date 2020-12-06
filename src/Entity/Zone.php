@@ -14,7 +14,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     iri="http://schema.org/Zone",
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={
  *      "get"={
  *          "normalization_context"={"groups":{"zone:read"}}
@@ -37,59 +39,58 @@ class Zone
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * Code.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read"})
+     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read", "store:read"})
      */
-    private $code;
+    private string $code;
 
     /**
      * Name.
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotNull ()
      * @Assert\Type("string")
-     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read"})
+     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read", "store:read"})
      * @ApiProperty(iri="http://schema.org/name")
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      *
      */
-    private $name;
+    private string $name;
 
     /**
      * Type
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
-     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read"})
+     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read", "store:read"})
      */
-    private $type;
+    private string $type;
 
     /**
      * Date when the zone has been updated.
      *
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"zone:read"})
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var string A "Y-m-d H:i:s" formatted value
      * @Groups({"zone:read"})
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="City")
-     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read"})
+     * @Groups({"zone:read", "zone:write", "address:read", "academic_unit:read", "store:read"})
      */
-    private $city;
+    private City $city;
 
     public function getId(): ?int
     {
@@ -173,7 +174,7 @@ class Zone
         return $this->city;
     }
 
-    public function setCity(?City $city): self
+    public function setCity(City $city): self
     {
         $this->city = $city;
 

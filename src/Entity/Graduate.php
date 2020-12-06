@@ -14,7 +14,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     iri="http://schema.org/Graduate",
+ *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
  *     itemOperations={
  *      "get"={
  *          "normalization_context"={
@@ -152,12 +154,6 @@ class Graduate extends User
      */
     private ?string $cellPhone;
 
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({ "graduate:read", "graduate:write"})
-     */
-    protected ?string $idFirebase = null;
 
     /**
      * @ORM\ManyToMany(targetEntity=Address::class)
@@ -398,19 +394,6 @@ class Graduate extends User
     public function setCellPhone(string $cellPhone): self
     {
         $this->cellPhone = $cellPhone;
-
-        return $this;
-    }
-
-
-    public function getIdFirebase(): ?string
-    {
-        return $this->idFirebase;
-    }
-
-    public function setIdFirebase(string $idFirebase): self
-    {
-        $this->idFirebase = $idFirebase;
 
         return $this;
     }
