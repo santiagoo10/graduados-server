@@ -74,6 +74,13 @@ class SaleType
      */
     public Collection $images;
 
+    /**
+     * @ORM\OneToOne(targetEntity=MediaObject::class, cascade={"persist", "remove"})
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read" })
+     * @ApiProperty(iri="http://schema.org/image")
+     */
+    private ?MediaObject $imagen;
+
     public function __construct(){
        $this->images = new ArrayCollection();
     }
@@ -156,6 +163,18 @@ class SaleType
 
     public function removeImage(MediaObject $image){
         $this->images->remove($image);
+    }
+
+    public function getImagen(): ?MediaObject
+    {
+        return $this->imagen;
+    }
+
+    public function setImagen(?MediaObject $imagen): self
+    {
+        $this->imagen = $imagen;
+
+        return $this;
     }
 
 }

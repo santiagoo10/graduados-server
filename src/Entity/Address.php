@@ -78,14 +78,18 @@ class Address
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({
-     *     "address:read", "address:write"
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
      * })
      */
     private ?float $latitude;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"address:read", "address:write"})
+     * @Groups({
+     *     "address:read", "address:write",
+     *     "store:write", "store:read",
+     * })
      */
     private ?float $longitude;
 
