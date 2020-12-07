@@ -58,14 +58,10 @@ final class UserDataPersister implements ContextAwareDataPersisterInterface
             $data->eraseCredentials();
         }
 
-
-
-//        $userRecord = $this->auth->createUserWithEmailAndPassword($data->getEmail(), '123456');
         try {
             $userRecord = $this->auth->createUserWithEmailAndPassword($data->getEmail(), $data->getPlainPassword());
             $data->setIdFirebase($userRecord->uid);
-        } catch (AuthException $e) {
-        } catch (FirebaseException $e) {
+        } catch (AuthException | FirebaseException $e) {
         }
 
         $this->entityManager->persist($data);

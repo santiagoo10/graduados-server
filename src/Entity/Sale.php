@@ -94,9 +94,10 @@ class Sale
 
     /**
      * @ORM\ManyToOne(targetEntity="Store")
+     * @ORM\JoinColumn(nullable=true)
      * @Groups({"sale:read", "sale:write"})
      */
-    private ?Store $store;
+    private ?Store $store=null;
 
     /**
      * @var Collection<int, MediaObject>|MediaObject[]
