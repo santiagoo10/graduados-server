@@ -12,7 +12,7 @@
         "doctrine/annotations": "^1.8",
         "doctrine/doctrine-migrations-bundle": "^2.1",
         "fzaninotto/faker": "^1.9",
-        "kreait/firebase-bundle": "^2.2",
+        "kreait/firebase-bundle": "^2.3",
         "ktamas77/firebase-php": "^2.2",
         "lexik/jwt-authentication-bundle": "^2.6",
         "nelmio/api-doc-bundle": "^3.6",

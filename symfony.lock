@@ -157,6 +157,9 @@
     "google/crc32": {
         "version": "v0.1.0"
     },
+    "grpc/grpc": {
+        "version": "1.30.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "7.1.0"
     },

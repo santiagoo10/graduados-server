@@ -7,11 +7,10 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use DateTime;
+use phpDocumentor\Reflection\Types\Null_;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -66,24 +65,16 @@ class SaleType
      */
     private ?DateTimeInterface $updatedAt;
 
-    /**
-     * @var Collection<int, MediaObject>|MediaObject[]
-     * @ORM\ManyToMany (targetEntity=MediaObject::class)
-     * @ORM\JoinTable()
-     * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read" })
-     */
-    public Collection $images;
 
     /**
+     * @var MediaObject|Null
+     *
      * @ORM\OneToOne(targetEntity=MediaObject::class, cascade={"persist", "remove"})
      * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read" })
      * @ApiProperty(iri="http://schema.org/image")
      */
     private ?MediaObject $imagen;
 
-    public function __construct(){
-       $this->images = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -147,22 +138,6 @@ class SaleType
         $this->updatedAt = new DateTime();
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, MediaObject>|MediaObject[]
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(MediaObject $image){
-        $this->images->add($image);
-    }
-
-    public function removeImage(MediaObject $image){
-        $this->images->remove($image);
     }
 
     public function getImagen(): ?MediaObject

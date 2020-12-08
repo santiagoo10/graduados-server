@@ -66,32 +66,7 @@ class UserCreatedSubscriber implements EventSubscriberInterface
 //        }
     }
 
-    public function sendOwnerPost(Owner $owner){
-        if($owner->getIdFirebase()){
-            try {
-                $userRecord = $this->auth->createUserWithEmailAndPassword($owner->getEmail(), '123456');
-                $owner->setUidFirebase($userRecord);
-//                $this->entityManager->persist($owner);
-//                $this->entityManager->flush();
 
-            } catch (AuthException $e) {
-            } catch (FirebaseException $e) {
-            }
-
-        }
-
-
-    }
-
-    public function sendStorePost(Store $store){
-       //TODO aparentemente sólo guarda los benecificios en la db firestore. Por lo tanto acá no debería hacer nada
-
-    }
-    public function sendUserPost(User $user){
-        //Todo enviar el user
-        $this->logger->info('Envía un usuario');
-
-    }
 
    public function sendSalePost( Sale $sale){
        $store = $sale->getStore();
