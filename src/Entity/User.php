@@ -12,23 +12,31 @@ use DateTime;
 use DateTimeInterface;
 use Exception;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Boolean;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use App\Security\Role;
+use App\Controller\ResetPasswordAction;
 
 /**
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="http://schema.org/User",
  *     collectionOperations={"get"={"security"="is_granted('ROLE_ADMIN')"}, "post"},
- *     itemOperations={"get", "put", "delete"={"method"="DELETE"}},
+ *     itemOperations={
+ *      "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *      "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *      "put-reset-password"={
+ *          "controller"=ResetPasswordAction::class,
+ *          "security"="is_granted('ROLE_ADMIN')",
+ *          "method"="PUT",
+ *          "path"="/users/{id}/reset-password",
+ *          "denormalization_context"={"groups"={"put-reset-password"}}
+ *       },
+ *      "delete"={"method"="DELETE"}},
  *     attributes={ "pagination_per_page"= 10},
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}}
@@ -111,6 +119,7 @@ class User implements UserInterface
      *
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @SecurityAssert\UserPassword()
      */
     protected string $password;
 
@@ -120,6 +129,23 @@ class User implements UserInterface
      * @SerializedName("password")
      */
     protected string $plainPassword;
+
+    /**
+     * User new password
+     * @var string|null User new password
+     * @Groups({"put-reset-password"})
+     *
+     */
+    private ?string $newPassword=null;
+
+    /**
+     * Old password
+     *
+     * @var string|null
+     * @SecurityAssert\UserPassword()
+     * @Groups({"put-reset-password"})
+     */
+    private ?string $oldPassword=null;
 
     /**
      * User name.
@@ -218,7 +244,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
+        $roles[] = Role::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -347,6 +373,38 @@ class User implements UserInterface
         $this->apiToken = $apiToken;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNewPassword(): ?string
+    {
+        return $this->newPassword;
+    }
+
+    /**
+     * @param string|null $newPassword
+     */
+    public function setNewPassword(?string $newPassword): void
+    {
+        $this->newPassword = $newPassword;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOldPassword(): ?string
+    {
+        return $this->oldPassword;
+    }
+
+    /**
+     * @param string|null $oldPassword
+     */
+    public function setOldPassword(?string $oldPassword): void
+    {
+        $this->oldPassword = $oldPassword;
     }
 
 }
