@@ -119,7 +119,6 @@ class User implements UserInterface
      *
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
-     * @SecurityAssert\UserPassword()
      */
     protected string $password;
 
@@ -142,10 +141,17 @@ class User implements UserInterface
      * Old password
      *
      * @var string|null
-     * @SecurityAssert\UserPassword()
+     * @SecurityAssert\UserPassword(message="El pasword no es el actual.")
      * @Groups({"put-reset-password"})
      */
     private ?string $oldPassword=null;
+
+
+    /**
+     * @var int|null
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $passwordChangeDate=null;
 
     /**
      * User name.
@@ -405,6 +411,22 @@ class User implements UserInterface
     public function setOldPassword(?string $oldPassword): void
     {
         $this->oldPassword = $oldPassword;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPasswordChangeDate(): ?int
+    {
+        return $this->passwordChangeDate;
+    }
+
+    /**
+     * @param int|null $passwordChangeDate
+     */
+    public function setPasswordChangeDate(?int $passwordChangeDate): void
+    {
+        $this->passwordChangeDate = $passwordChangeDate;
     }
 
 }
