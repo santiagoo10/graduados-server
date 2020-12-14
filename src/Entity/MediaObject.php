@@ -74,9 +74,17 @@ class MediaObject
 
     /**
      * @var string|null
-     * @ORM\Column( nullable=true)
+     * @ORM\Column(nullable=true)
      */
     public ?string $filePath;
+
+
+    /**
+     * @var string|null
+     * @ORM\Column(nullable=true)
+     * @Groups({"media_object_read"})
+     */
+    public ?string $storeFirebase;
 
     public function getId(): ?int
     {
@@ -86,6 +94,22 @@ class MediaObject
     public function getFilePath(): ?string
     {
         return $this->filePath;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStoreFirebase(): ?string
+    {
+        return $this->storeFirebase;
+    }
+
+    /**
+     * @param string|null $storeFirebase
+     */
+    public function setStoreFirebase(?string $storeFirebase): void
+    {
+        $this->storeFirebase = $storeFirebase;
     }
 
     public function setFilePath(?string $filePath): self

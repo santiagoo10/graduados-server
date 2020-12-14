@@ -29,6 +29,7 @@ services:
     Kreait\Firebase\Auth: '@kreait_firebase.my_project.auth'
     Kreait\Firebase\Firestore: '@kreait_firebase.my_project.firestore'
     Kreait\Firebase\Database: '@kreait_firebase.my_project.database'
+    Kreait\Firebase\Storage: '@kreait_firebase.my_project.storage'
 
 #    App\EventSubscriber\DatabaseActivitySubscriber:
 #        tags:
