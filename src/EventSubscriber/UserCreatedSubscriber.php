@@ -92,9 +92,7 @@ class UserCreatedSubscriber implements EventSubscriberInterface
 
 
 
-            } catch (AuthException $e) {
-                $this->logger->error($e->getMessage());
-            } catch (FirebaseException $e) {
+            } catch (AuthException | FirebaseException $e) {
                 $this->logger->error($e->getMessage());
             }
 

@@ -46,7 +46,6 @@ final class SaleDataPersister implements ContextAwareDataPersisterInterface
      * @param Sale $data
      * @param array $context
      * @return object|void
-     * @throws DatabaseException
      * @throws Exception
      */
     public function persist($data, array $context = [])

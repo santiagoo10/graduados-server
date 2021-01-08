@@ -26,7 +26,6 @@ final class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInt
      */
     public static function getSubscribedEvents(): array
     {
-        // TODO: Implement getSubscribedEvents() method.
         return [
             KernelEvents::VIEW => ['onPreSerialize', EventPriorities::PRE_SERIALIZE],
         ];
@@ -41,7 +40,9 @@ final class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInt
             return;
         }
 
-        if(!($attributes = RequestAttributesExtractor::extractAttributes($request))|| !\is_a($attributes['resource_class'], MediaObject::class, true)){
+
+
+        if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) || !\is_a($attributes['resource_class'], MediaObject::class, true)) {
             return;
         }
 

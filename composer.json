@@ -1,5 +1,5 @@
 {
-    "name": "graduados-api",
+    "name": "renerecalde/graduados-api",
     "description": "graduados api",
     "type": "project",
     "license": "proprietary",
@@ -16,7 +16,7 @@
         "ktamas77/firebase-php": "^2.2",
         "lexik/jwt-authentication-bundle": "^2.6",
         "nelmio/api-doc-bundle": "^3.6",
-        "nelmio/cors-bundle": "@dev",
+        "nelmio/cors-bundle": "^2.1",
         "ramsey/uuid-doctrine": "^1.6",
         "symfony/console": "5.1.*",
         "symfony/dotenv": "5.1.*",
