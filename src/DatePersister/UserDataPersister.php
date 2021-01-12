@@ -8,6 +8,7 @@ namespace App\DatePersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -47,6 +48,7 @@ final class UserDataPersister implements ContextAwareDataPersisterInterface
      * @param User $data
      * @param array $context
      * @return object|void
+     * @throws OptimisticLockException
      */
     public function persist($data, array $context = [])
     {
@@ -62,7 +64,7 @@ final class UserDataPersister implements ContextAwareDataPersisterInterface
             $userRecord = $this->auth->createUserWithEmailAndPassword($data->getEmail(), $data->getPlainPassword());
             $data->setIdFirebase($userRecord->uid);
         } catch (AuthException | FirebaseException $e) {
-            //TODO handle expection
+            throw new OptimisticLockException($e->getMessage(), $data);
         }
 
         $this->entityManager->persist($data);

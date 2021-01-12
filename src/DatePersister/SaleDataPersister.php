@@ -8,9 +8,11 @@ namespace App\DatePersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Sale;
 use App\Repository\StoreRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Kreait\Firebase\Exception\DatabaseException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Security;
 use Kreait\Firebase\Database;
 
@@ -47,21 +49,18 @@ final class SaleDataPersister implements ContextAwareDataPersisterInterface
      * @param array $context
      * @return object|void
      * @throws Exception
+     * @throws DatabaseException
      */
     public function persist($data, array $context = [])
     {
 
         $user = $this->security->getUser();
+
         if($this->security->isGranted('ROLE_ADMIN')){
-            //TODO firebase para admin
-
+            throw new UnauthorizedHttpException("Token",  "Not enough permissions for the resource", null, 401);
         }else{
-
             $store = $this->storeRepository->findOneBy(['owner' => $user]);
             $data->setStore($store);
-
-
-            //TODO firebase para owner
         }
 
 
@@ -71,8 +70,8 @@ final class SaleDataPersister implements ContextAwareDataPersisterInterface
         $latitude = $storeData->getAddress()->getLatitude();
         $longitude = $storeData->getAddress()->getLongitude();
         $storeOwner = $storeData->getOwner();
-        $createAt =  new \DateTime();
-        $dataFirebase= [
+        $createAt =  new DateTime();
+        $dataFirebase = [
             'address' => $street . " " . $streetNumber,
             'createAt'=> $createAt->format('dd-MM-yyyy'),
             'createBy'=> $storeOwner->getIdFirebase(),
@@ -95,7 +94,7 @@ final class SaleDataPersister implements ContextAwareDataPersisterInterface
         $random = bin2hex(random_bytes(4));
         $path = '/sales/' . $random;
         //Esto hay que hacerlo con un post, es un api!
-//        $idFirebase =$this->db->getReference($path)->set($dataFirebase);
+        $idFirebase =$this->db->getReference($path)->set($dataFirebase);
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
