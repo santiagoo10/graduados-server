@@ -33,6 +33,7 @@ class SaleType
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"sale_type:read"})
      */
     private ?int $id;
 
@@ -69,7 +70,7 @@ class SaleType
      * @var MediaObject|Null
      *
      * @ORM\OneToOne(targetEntity=MediaObject::class, cascade={"persist", "remove"})
-     * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read" })
+     * @Groups({"sale_type:read", "sale_type:write", "sale:read", "media_object_read", "media_object_create", "media_object_read" })
      * @ApiProperty(iri="http://schema.org/image")
      */
     private ?MediaObject $imagen;

@@ -42,28 +42,6 @@ class UserCreatedSubscriber implements EventSubscriberInterface
 
     public function sendPost(ViewEvent $event){
         $value = $event->getControllerResult();
-//        switch (true){
-//            case ($value instanceof User):
-//                $roles= $value->getRoles();
-//                switch (end($roles)){
-//                    case 'ROLE_USER':
-//                        $this->sendUserPost($value);
-//                        break;
-//                    case 'ROLE_GRADUATE':
-//                        $this->sendGraduatePost($value );
-//                        break;
-//                    case 'ROLE_OWNER':
-//                        $this->sendOwnerPost($value );
-//                        break;
-//                }
-//                break;
-//            case ($value instanceof Sale):
-//                $this->sendSalePost($value);
-//                break;
-//            case ($value instanceof Store):
-//                $this->sendStorePost($value);
-//                break;
-//        }
     }
 
 
@@ -74,9 +52,6 @@ class UserCreatedSubscriber implements EventSubscriberInterface
        $owner = $store->getOwner();
        $data = [
            'address' => $storeAdress->getStreet() . " " . $storeAdress->getNumber(),
-//           'createdAt' => $sale->getCreatedAt()
-//           'createdBy' => seguirrrrj
-
        ];
 
        //Todo enviar el beneficio
@@ -88,23 +63,14 @@ class UserCreatedSubscriber implements EventSubscriberInterface
             try {
                 $userRecord=$this->auth->createUserWithEmailAndPassword($graduate->getEmail(), '123456');
                 $graduate->setIdFirebase($userRecord);
-
-
-
-
             } catch (AuthException | FirebaseException $e) {
                 $this->logger->error($e->getMessage());
             }
 
         }
 
-
        //Todo enviar el graduado
         $this->logger->info('Envía un graduado');
    }
-
-
-
-
 
 }

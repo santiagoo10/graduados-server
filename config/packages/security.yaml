@@ -3,7 +3,6 @@ security:
         App\Entity\User:
             algorithm: auto
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         app_user_provider:
             entity:
@@ -25,7 +24,6 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             guard:
                 authenticators:
-#                    - lexik_jwt_authentication.jwt_token_authenticator
                     - App\Security\TokenAuthenticator
             logout:
                 path: app_logout

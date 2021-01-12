@@ -141,7 +141,6 @@ class User implements UserInterface
      * Old password
      *
      * @var string|null
-     * @SecurityAssert\UserPassword(message="El pasword no es el actual.")
      * @Groups({"put-reset-password"})
      */
     private ?string $oldPassword=null;
@@ -198,6 +197,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->roles[] = Role::ROLE_USER;
+//        $this->oldPassword = $this->password;
     }
 
     /**
@@ -280,7 +280,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt():void
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }

@@ -82,9 +82,9 @@ class MediaObject
     /**
      * @var string|null
      * @ORM\Column(nullable=true)
-     * @Groups({"media_object_read"})
+     * @Groups({"media_object_read", "media_object_write"})
      */
-    public ?string $storeFirebase;
+    protected ?string $storeFirebase;
 
     public function getId(): ?int
     {
