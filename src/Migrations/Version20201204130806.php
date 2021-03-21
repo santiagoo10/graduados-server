@@ -38,7 +38,27 @@ final class Version20201204130806 extends AbstractMigration
         $this->addSql('CREATE TABLE sale_type (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE sale_type_media_object (sale_type_id INT NOT NULL, media_object_id INT NOT NULL, INDEX IDX_179924B8B0524E01 (sale_type_id), INDEX IDX_179924B864DE5A5 (media_object_id), PRIMARY KEY(sale_type_id, media_object_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE store (id INT AUTO_INCREMENT NOT NULL, address_id INT DEFAULT NULL, owner_id INT NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, phone VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_FF575877F5B7AF75 (address_id), INDEX IDX_FF5758777E3C61F9 (owner_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(191) NOT NULL, roles JSON NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, password VARCHAR(255) DEFAULT NULL, username VARCHAR(191) NOT NULL, is_active TINYINT(1) NOT NULL, api_token VARCHAR(255) DEFAULT NULL, id_firebase VARCHAR(255) DEFAULT NULL, discr VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D649F85E0677 (username), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+
+
+        $this->addSql('
+                CREATE TABLE user (
+                    id INT AUTO_INCREMENT NOT NULL, 
+                    email VARCHAR(191) NOT NULL, 
+                    roles JSON NOT NULL, 
+                    password VARCHAR(255) DEFAULT NULL, 
+                    username VARCHAR(191) NOT NULL, 
+                    is_active TINYINT(1) NOT NULL, 
+                    api_token VARCHAR(255) DEFAULT NULL, 
+                    id_firebase VARCHAR(255) DEFAULT NULL, 
+                    discr VARCHAR(255) NOT NULL, 
+                    password_change_date INT DEFAULT NULL,
+                    created_at DATETIME NOT NULL default CURRENT_TIMESTAMP , 
+                    updated_at DATETIME NOT NULL default CURRENT_TIMESTAMP, 
+                    UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), 
+                    UNIQUE INDEX UNIQ_8D93D649F85E0677 (username), 
+                    PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+
+
         $this->addSql('CREATE TABLE zone (id INT AUTO_INCREMENT NOT NULL, city_id INT DEFAULT NULL, code VARCHAR(255) DEFAULT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_A0EBC0078BAC62AF (city_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE `admin` ADD CONSTRAINT FK_880E0D76BF396750 FOREIGN KEY (id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE city ADD CONSTRAINT FK_2D5B0234E946114A FOREIGN KEY (province_id) REFERENCES province (id)');
