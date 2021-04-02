@@ -33,7 +33,7 @@
  INSERT INTO `graduados_db`.`user`
  (`id`,`email`,`roles`,`created_at`,`updated_at`,`password`,`username`,`is_active`,`api_token`,id_firebase`,`discr`)
  VALUES
- (1,'santiagoo10@gmail.com','[\"ROLE_USER\"]',now(),now(),'$argon2id$v=19$m=65536,t=4,p=1$cndnYmVmcmppQnVObnBqWQ$XiXnD71U8jqasSsZvT/XolzcP2PB6UDc4mAO9A9sv1E','santiagoo',true,null,null,'admin');
+ (1,'santiagoo10@gmail.com','[\"ROLE_ADMIN\"]',now(),now(),'$argon2id$v=19$m=65536,t=4,p=1$cndnYmVmcmppQnVObnBqWQ$XiXnD71U8jqasSsZvT/XolzcP2PB6UDc4mAO9A9sv1E','santiagoo',true,null,null,'admin');
  
  Borrar y crear todo de nuevo (en caso que lo necesitemos)
  -- sf doctrine:database:drop --force 
