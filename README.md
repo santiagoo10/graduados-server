@@ -48,6 +48,23 @@ Backend for graduados app.
 
 ####  5 - Ir http://localhost:250/api/docs
 
+### 6 - Test endpoints
+
+#### obtener token
+
+`POST : http://localhost:250/api/login_check
+
+{
+    "username":"santiagoo",
+    "password": "123456"
+} `
+
+#### obtener usuarios
+
+`GET :  http://localhost:250/api/users
+
+Header: Authorization: Bearer {token} `
+
 ##Entorno productivo
 
 ###Login heroku console
