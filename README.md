@@ -51,19 +51,20 @@ Backend for graduados app.
 ### 6 - Test endpoints
 
 #### obtener token
-
-`POST : http://localhost:250/api/login_check
+```
+POST : http://localhost:250/api/login_check
 
 {
     "username":"santiagoo",
     "password": "123456"
-} `
-
+}
+```
 #### obtener usuarios
+```
+GET :  http://localhost:250/api/users
 
-`GET :  http://localhost:250/api/users
-
-Header: Authorization: Bearer {token} `
+Header: Authorization: Bearer {token} 
+```
 
 ##Entorno productivo
 
