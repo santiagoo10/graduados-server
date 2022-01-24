@@ -1,12 +1,13 @@
-#Graduados Server
+# Graduados Server
+Backend for graduados app.
 
-##Stack
+## Stack
 - git
 - docker compose
 - php storm
 - postman (opcional)
 
-##Entorno Local
+## Entorno Local
 
 ####  1 - Clonar el proyecto
  - git clone https://gitlab.com/renerecalde/oferta.git
