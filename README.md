@@ -9,7 +9,7 @@ Backend form graduados app.
 
 ## Entorno Local
 1 - Clonar el proyecto
- - git clone https://gitlab.com/renerecalde/oferta.git
+ - git clone  <del> https://gitlab.com/renerecalde/oferta.git  </del>
  - git checkout develop
  
 2 - Levantar proyecto (docker-compose)
