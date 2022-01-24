@@ -1,12 +1,13 @@
 # Graduados Server
+Backend form graduados app.
 
-##Stack
+## Stack
 - git
 - docker
 - postman
 - dry
 
-##Entorno Local
+## Entorno Local
 1 - Clonar el proyecto
  - git clone https://gitlab.com/renerecalde/oferta.git
  - git checkout develop
@@ -28,9 +29,9 @@
 5 - Ir http://localhost:250/api/docs
 
 
-##Entorno productivo
+## Entorno productivo
 
-###login heroku
+### login heroku
 santiagoo10@gmail.com
 4896257.Hh
 
