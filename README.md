@@ -27,7 +27,7 @@ Backend for graduados app.
  - sf c:c (borrar cache)
  - sf doctrine:database:create (crear la db manualmente)
  - sf doctrine:migrations:migrate (correr las migraciones)
- - sf doctrine:fixtures:load (correr fixtures)
+ - <del> sf doctrine:fixtures:load (correr fixtures) </del>
  
  -- sino funcionan los fixtures , creamos el user santiagoo/123456 manualmente
  
