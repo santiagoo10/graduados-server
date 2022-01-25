@@ -27,7 +27,7 @@ Backend for graduados app.
  - sf c:c (borrar cache)
  - sf doctrine:database:create (crear la db manualmente)
  - sf doctrine:migrations:migrate (correr las migraciones)
- - sf doctrine:fixtures:load (correr fixtures)
+ - <del> sf doctrine:fixtures:load (correr fixtures) </del>
  
  -- sino funcionan los fixtures , creamos el user santiagoo/123456 manualmente
  
@@ -47,6 +47,24 @@ Backend for graduados app.
  - make generate-ssh-keys
 
 ####  5 - Ir http://localhost:250/api/docs
+
+### 6 - Test endpoints
+
+#### obtener token
+```
+POST : http://localhost:250/api/login_check
+
+{
+    "username":"santiagoo",
+    "password": "123456"
+}
+```
+#### obtener usuarios
+```
+GET :  http://localhost:250/api/users
+
+Header: Authorization: Bearer {token} 
+```
 
 ##Entorno productivo
 
