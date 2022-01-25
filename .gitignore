@@ -37,3 +37,8 @@ yarn-error.log
 config/packages/nelmio_cors.yaml.local
 config/packages/nelmio_cors.yaml.repo
 ###< local config ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
